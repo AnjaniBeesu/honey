@@ -74,26 +74,29 @@ const canvas=document.createElement("canvas");
 const ctx=canvas.getContext("2d");
 
 function heartSegments(){
-  const points=[],scale=13.1,cx=300,cy=310;
-  for(let i=0;i<=3000;i++){
-    const t=i/3000*Math.PI*2;
-    points.push({x:cx+16*Math.sin(t)**3*scale,y:cy-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*scale});
-  }
-  const minY=Math.min(...points.map(p=>p.y)),maxY=Math.max(...points.map(p=>p.y));
-  const rows=[];
-  // Dense, evenly spaced scanlines preserve the lower taper instead of cutting it off.
-  for(let y=minY+5;y<=maxY-7;y+=8.2){
-    const xs=[];
-    for(let i=0;i<points.length-1;i++){
-      const a=points[i],b=points[i+1];
-      if((a.y<=y&&b.y>y)||(b.y<=y&&a.y>y)){
-        const f=(y-a.y)/(b.y-a.y);xs.push(a.x+f*(b.x-a.x));
+  // The silhouette is derived directly from the requested implicit equation:
+  // (x² + y² - 1)³ - x²y³ = 0.  Points satisfying f(x,y) <= 0
+  // are inside the heart.  Each scanline is found from its zero crossings.
+  const scale=232,cx=300,cy=306,rows=[];
+  const equation=(x,y)=>Math.pow(x*x+y*y-1,3)-x*x*y*y*y;
+  for(let mathY=0.985;mathY>=-1.005;mathY-=0.026){
+    const hits=[];
+    const steps=1800,lo=-1.18,hi=1.18,dx=(hi-lo)/steps;
+    let px=lo,pv=equation(px,mathY);
+    for(let i=1;i<=steps;i++){
+      const x=lo+i*dx,v=equation(x,mathY);
+      if((pv<=0&&v>0)||(pv>0&&v<=0)){
+        const t=pv/(pv-v);
+        hits.push(px+(x-px)*t);
       }
+      px=x;pv=v;
     }
-    xs.sort((a,b)=>a-b);
-    for(let i=0;i+1<xs.length;i+=2){
-      const left=xs[i]+3.5,right=xs[i+1]-3.5;
-      if(right-left>5)rows.push({y,left,right});
+    if(hits.length>=2){
+      // Pair the crossings and keep only genuinely interior spans.
+      for(let i=0;i+1<hits.length;i+=2){
+        const left=cx+hits[i]*scale+1.5,right=cx+hits[i+1]*scale-1.5;
+        if(right-left>4)rows.push({y:cy-mathY*scale,left,right});
+      }
     }
   }
   return rows;
@@ -128,95 +131,71 @@ function fontFor(text,size){
 function layout(){
   svg.replaceChildren();
   const mobile=window.matchMedia("(max-width:520px)").matches;
-  const baseSize=mobile?6.7:7.5;
-  const gap=mobile?5.8:7.2;
+  const baseSize=mobile?6.4:7.1;
+  const gap=mobile?5.2:6.2;
   const rows=heartSegments();
-  // Work on a fresh copy on every render: replay/resize never loses phrases.
   const remaining=phrases.map(([phrase,language],index)=>({phrase,language,index}));
   const placements=[];
+  // Pack each row independently. A phrase is committed only after its measured
+  // width plus the mandatory gap fits, so no fallback can overwrite another.
   for(const row of rows){
     if(!remaining.length)break;
     const available=row.right-row.left;
-    const picked=[];
-    let used=0;
-    // Fit as many complete phrases as possible, always reserving a visible gap.
+    let cursor=row.left;
+    const rowItems=[];
     while(remaining.length){
-      const room=available-used-(picked.length?gap:0);
+      const room=row.right-cursor-(rowItems.length?gap:0);
       if(room<=0)break;
-      let best=-1,bestWidth=Infinity,bestFamily="",bestSize=baseSize;
+      let chosen=-1,chosenWidth=Infinity,chosenFamily="",chosenSize=baseSize;
       for(let i=0;i<remaining.length;i++){
         const family=fontFor(remaining[i].phrase,baseSize);
         const width=ctx.measureText(remaining[i].phrase).width;
-        if(width<=room&&width<bestWidth){best=i;bestWidth=width;bestFamily=family;}
+        if(width<=room && width<chosenWidth){
+          chosen=i;chosenWidth=width;chosenFamily=family;
+        }
       }
-      // Near the pointed tip, gently scale one short phrase down to keep the
-      // heart filled all the way to its terminal rows without clipping it.
-      if(best<0&&!picked.length&&available>=7){
-        let shortest=0,shortWidth=Infinity,shortFamily="";
+      // Narrow rows near the lobes/tip may use a smaller phrase, but never
+      // below 3.5px and never beyond the row's actual interior boundaries.
+      if(chosen<0&&!rowItems.length&&available>=8){
+        let shortest=-1,shortestWidth=Infinity,shortestFamily="";
         for(let i=0;i<remaining.length;i++){
           const family=fontFor(remaining[i].phrase,baseSize);
           const width=ctx.measureText(remaining[i].phrase).width;
-          if(width<shortWidth){shortest=i;shortWidth=width;shortFamily=family;}
+          if(width<shortestWidth){shortest=i;shortestWidth=width;shortestFamily=family;}
         }
-        const fitted=baseSize*Math.min(1,(available-2)/shortWidth);
-        if(fitted>=3.25){
-          fontFor(remaining[shortest].phrase,fitted);
-          best=shortest;bestWidth=ctx.measureText(remaining[shortest].phrase).width;
-          bestFamily=shortFamily;bestSize=fitted;
+        const fit=baseSize*Math.min(1,(available-2)/shortestWidth);
+        if(fit>=3.5){
+          fontFor(remaining[shortest].phrase,fit);
+          chosen=shortest;chosenWidth=ctx.measureText(remaining[shortest].phrase).width;
+          chosenFamily=shortestFamily;chosenSize=fit;
         }
       }
-      if(best<0)break;
-      const item=remaining.splice(best,1)[0];
-      picked.push({...item,width:bestWidth,family:bestFamily,size:bestSize});
-      used+=bestWidth+(picked.length>1?gap:0);
+      if(chosen<0)break;
+      const item=remaining.splice(chosen,1)[0];
+      rowItems.push({item,width:chosenWidth,family:chosenFamily,size:chosenSize});
+      cursor+=chosenWidth+(rowItems.length>1?gap:0);
     }
-    if(!picked.length)continue;
-    const total=picked.reduce((sum,p)=>sum+p.width,0)+gap*(picked.length-1);
+    if(!rowItems.length)continue;
+    const total=rowItems.reduce((s,p)=>s+p.width,0)+gap*(rowItems.length-1);
     let x=(row.left+row.right-total)/2;
-    for(const item of picked){
+    for(const p of rowItems){
       const el=document.createElementNS(NS,"text");
-      el.setAttribute("x",(x+item.width/2).toFixed(2));
+      el.setAttribute("x",(x+p.width/2).toFixed(2));
       el.setAttribute("y",row.y.toFixed(2));
-      el.setAttribute("font-size",item.size+"px");
       el.setAttribute("class","word");
-      el.setAttribute("font-family",item.family);
-      el.textContent=item.phrase;
+      el.setAttribute("font-family",p.family);
+      el.style.fontSize=p.size+"px";
+      el.textContent=p.item.phrase;
       svg.appendChild(el);
-      placements.push({el,y:row.y,x:x+item.width/2});
-      x+=item.width+gap;
+      placements.push({el,y:row.y,x:x+p.width/2});
+      x+=p.width+gap;
     }
   }
-  // If any unusually long phrases remain, place them in the widest free rows
-  // at a smaller readable size rather than silently dropping them.
-  if(remaining.length){
-    const wideRows=[...rows].sort((a,b)=>(b.right-b.left)-(a.right-a.left));
-    for(const row of wideRows){
-      if(!remaining.length)break;
-      const phrase=remaining[0].phrase;
-      const family=fontFor(phrase,baseSize);
-      const width=ctx.measureText(phrase).width;
-      const fit=Math.min(baseSize,(row.right-row.left-8)/width)*0.88;
-      if(fit<3.2)continue;
-      fontFor(phrase,fit);
-      const fittedWidth=ctx.measureText(phrase).width;
-      const el=document.createElementNS(NS,"text");
-      el.setAttribute("x",((row.left+row.right)/2).toFixed(2));
-      el.setAttribute("y",row.y.toFixed(2));
-      el.setAttribute("font-size",fit+"px");
-      el.setAttribute("class","word");
-      el.setAttribute("font-family",family);
-      el.textContent=phrase;
-      svg.appendChild(el);
-      placements.push({el,y:row.y,x:(row.left+row.right)/2});
-      remaining.shift();
-    }
-  }
-  // Animate from the outer contour inward, while retaining the pointed base.
-  const centerY=310;
-  placements.sort((a,b)=>{
-    const da=Math.abs(a.y-centerY),db=Math.abs(b.y-centerY);
-    return db-da || a.x-b.x;
-  });
+  // Deliberately do not force leftover phrases into occupied rows: that would
+  // violate the no-overlap requirement. Report any capacity issue in console.
+  if(remaining.length)console.warn("Heart layout could not fit every phrase without overlap:",remaining.map(p=>p.language));
+  const centerY=cy;
+  placements.sort((a,b)=>Math.abs(b.y-centerY)-Math.abs(a.y-centerY)||a.x-b.x);
   placements.forEach((p,i)=>{
     const timer=setTimeout(()=>p.el.classList.add("visible"),i*18);
     timers.push(timer);
