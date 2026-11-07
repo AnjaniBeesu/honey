@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080506">
+<meta name="description" content="A little love, in every language.">
+<title>for you, always ♥</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#080506;--red:#ff294b;--soft:#ff7184;--muted:#98777d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg)}
+body{min-height:100svh;display:grid;place-items:center;overflow-x:hidden;color:#fff;font-family:'DM Mono',monospace;background:radial-gradient(ellipse at 50% 43%,#260a12 0%,#10070a 35%,#080506 72%)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
+main{width:min(100%,900px);min-height:100svh;padding:48px 20px 30px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.eyebrow{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+h1{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(34px,6vw,58px);letter-spacing:-.035em;margin:0;text-align:center}
+h1 em{color:var(--soft);font-weight:500}
+.subtitle{font-size:10px;letter-spacing:.18em;color:#9b777e;text-transform:uppercase;margin:13px 0 0;text-align:center}
+.heart-wrap{width:min(100%,620px);margin:4px auto 0;position:relative;aspect-ratio:1.12/1;display:grid;place-items:center}
+svg{width:100%;height:100%;overflow:visible}
+.word{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;fill:var(--red);opacity:0;filter:drop-shadow(0 0 5px #ff294b66);transform-box:fill-box;transform-origin:center}
+.word.show{animation:appear .48s cubic-bezier(.16,1,.3,1) forwards}
+.word.edge{fill:#ff536b}
+.center-note{position:absolute;top:50%;left:50%;transform:translate(-50%,-43%);text-align:center;opacity:0;pointer-events:none;white-space:nowrap}
+.center-note.visible{animation:heartNote .9s ease forwards}
+.center-note span{display:block;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(20px,4vw,32px);color:#ffd0d7;text-shadow:0 0 24px #ff294b80}
+.center-note small{display:block;margin-top:7px;font-size:8px;letter-spacing:.24em;color:#e8798a;text-transform:uppercase}
+.controls{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:-2px}
+button{appearance:none;border:1px solid #6f2938;background:#19090e;color:#ff9aaa;padding:12px 21px;border-radius:99px;font:10px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:.25s}
+button:hover{background:#35101b;border-color:var(--red);box-shadow:0 0 25px #ff294b25;transform:translateY(-2px)}
+button:focus-visible{outline:2px solid var(--soft);outline-offset:4px}
+.progress{height:1px;width:130px;background:#32131c;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--red);box-shadow:0 0 8px var(--red);transition:width .2s}
+.footer{position:absolute;bottom:22px;font-size:9px;letter-spacing:.18em;color:#68434a;text-transform:uppercase}
+@keyframes appear{0%{opacity:0;transform:scale(.45) translateY(5px)}65%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes heartNote{0%{opacity:0;transform:translate(-50%,-35%) scale(.8)}100%{opacity:1;transform:translate(-50%,-43%) scale(1)}}
+@media(max-width:520px){main{padding:38px 10px 54px}.eyebrow{font-size:9px}.subtitle{font-size:8px}.word{font-size:9px}.heart-wrap{width:108%;margin:10px -4% 0}.footer{bottom:15px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">a small thing, for someone special</p>
+  <h1>Love has <em>many</em> languages.</h1>
+  <p class="subtitle">but it always means you</p>
+  <div class="heart-wrap">
+    <svg id="heart" viewBox="0 0 600 540" role="img" aria-label="A heart gradually formed from I love you written in many languages"></svg>
+    <div class="center-note" id="centerNote"><span>you are my favourite</span><small>in every language · always</small></div>
+  </div>
+  <div class="controls">
+    <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+    <button id="replay" type="button">↻ &nbsp; watch it again</button>
+  </div>
+  <div class="footer">made with all my heart <span aria-hidden="true">♥</span></div>
+</main>
+<script>
+const words=[
+ ['I love you','English'],['Te amo','Spanish'],['Je t’aime','French'],['Ich liebe dich','German'],
+ ['Ti amo','Italian'],['愛してる','Japanese'],['사랑해','Korean'],['我爱你','Chinese'],
+ ['Я тебя люблю','Russian'],['Eu te amo','Portuguese'],['أحبك','Arabic'],['मैं तुमसे प्यार करता हूँ','Hindi'],
+ ['నిన్ను ప్రేమిస్తున్నాను','Telugu'],['நான் உன்னை காதலிக்கிறேன்','Tamil'],['Mahal kita','Filipino'],
+ ['Ik hou van jou','Dutch'],['Jeg elsker dig','Danish'],['Jag älskar dig','Swedish'],['Kocham cię','Polish'],
+ ['Seni seviyorum','Turkish'],['Σ’ αγαπώ','Greek'],['愛してるよ','Japanese'],['Te quiero','Spanish'],
+ ['Aishiteru','Japanese'],['Ngiyakuthanda','Zulu'],['Mi amas vin','Esperanto'],['Volim te','Croatian'],
+ ['我愛你','Cantonese'],['אני אוהב אותך','Hebrew'],['Nakupenda','Swahili'],['Obicham te','Bulgarian'],
+ ['Szeretlek','Hungarian'],['Ke a go rata','Tswana'],['T’estimo','Catalan'],['Tha gaol agam ort','Scottish Gaelic']
+];
+const svg=document.querySelector('#heart'), progress=document.querySelector('#progress'), note=document.querySelector('#centerNote'), replay=document.querySelector('#replay');
+const NS='http://www.w3.org/2000/svg'; let timers=[];
+function clear(){timers.forEach(clearTimeout);timers=[];svg.replaceChildren();note.classList.remove('visible');progress.style.width='0%'}
+function makePoints(){
+ const edge=[];
+ for(let i=0;i<112;i++){const t=(Math.PI*2*i)/112;edge.push({x:300+16*Math.pow(Math.sin(t),3)*14,y:250-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*14,edge:true})}
+ const inside=[];
+ // Scan rows inside the classic parametric heart outline using its implicit equation.
+ for(let y=-1.12;y<=1.12;y+=.105)for(let x=-1.18;x<=1.18;x+=.105){
+  const f=Math.pow(x*x+y*y-1,3)-x*x*Math.pow(y,3);
+  if(f<-.015)inside.push({x:300+x*220,y:250-y*220,edge:false});
+ }
+ // Put the interior in a gentle outward spiral so the heart fills organically.
+ inside.sort((a,b)=>Math.atan2(a.y-250,a.x-300)-Math.atan2(b.y-250,b.x-300) || Math.hypot(a.x-300,a.y-250)-Math.hypot(b.x-300,b.y-250));
+ return [...edge,...inside];
+}
+function render(){
+ clear();const pts=makePoints();const total=pts.length;
+ const shuffledWords=[...words];let idx=0;
+ pts.forEach((p,i)=>{
+  const el=document.createElementNS(NS,'text');el.setAttribute('x',p.x.toFixed(1));el.setAttribute('y',p.y.toFixed(1));el.setAttribute('text-anchor','middle');el.setAttribute('dominant-baseline','middle');el.setAttribute('class','word'+(p.edge?' edge':''));
+  const w=shuffledWords[idx++%shuffledWords.length][0];el.textContent=w;svg.appendChild(el);
+  const delay=i*23;
+  const id=setTimeout(()=>{el.classList.add('show');progress.style.width=((i+1)/total*100)+'%'},delay);timers.push(id);
+ });
+ const finish=setTimeout(()=>note.classList.add('visible'),total*23+500);timers.push(finish);
+}
+replay.addEventListener('click',render);
+render();
+</script>
+</body>
+</html>
