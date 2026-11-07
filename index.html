@@ -116,35 +116,41 @@ function heartRows(){
   }
   return rows;
 }
-function buildRow(row,rowIndex){
-  const available=row.right-row.left;
+function buildRow(segment,rowIndex){
+  const available=segment.right-segment.left;
   const fontSize=window.innerWidth<520?9.2:10.2;
-  ctx.font='600 '+fontSize+'px "Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
-  const chosen=[];
-  let used=0;
-  // Each translation is used once; individual text nodes preserve real gaps.
+  const fontStack='"Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
+  ctx.font='600 '+fontSize+'px '+fontStack;
+
+  // Build a complete, naturally spaced line from unique phrases. Never
+  // stretch text to fit: the line is centred in its own exact heart slice.
+  const items=[];
+  let measured=0;
   while(phraseCursor<phrases.length){
-    const item=phrases[phraseCursor];
-    const width=ctx.measureText(item[0]).width;
-    const gap=9;
-    if(chosen.length && used+gap+width>available)break;
-    if(!chosen.length && width>available){phraseCursor++;continue;}
-    chosen.push({text:item[0],width});
-    used+=width+(chosen.length>1?gap:0);
+    const phrase=phrases[phraseCursor][0];
+    const width=ctx.measureText(phrase).width;
+    const gap=8;
+    const next=measured+(items.length?gap:0)+width;
+    if(next>available)break;
+    items.push({phrase,width});
+    measured=next;
     phraseCursor++;
   }
-  if(!chosen.length)return [];
-  let x=row.left+(available-used)/2;
-  return chosen.map(item=>{
+
+  // If the next translation is too long for this narrow slice, leave this
+  // slice empty rather than shifting the whole line off-centre or clipping it.
+  if(!items.length)return [];
+  let x=(segment.left+segment.right-measured)/2;
+  return items.map(item=>{
     const el=document.createElementNS(ns,'text');
-    el.setAttribute('x',x.toFixed(2));
-    el.setAttribute('y',row.y.toFixed(1));
+    el.setAttribute('x',x.toFixed(3));
+    el.setAttribute('y',segment.y.toFixed(2));
     el.setAttribute('text-anchor','start');
     el.setAttribute('dominant-baseline','middle');
     el.setAttribute('class','word');
-    el.textContent=item.text;
+    el.textContent=item.phrase;
     svg.appendChild(el);
-    x+=item.width+9;
+    x+=item.width+8;
     return el;
   });
 }
