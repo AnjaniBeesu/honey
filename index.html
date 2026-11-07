@@ -194,7 +194,7 @@ function layout(){
   // Deliberately do not force leftover phrases into occupied rows: that would
   // violate the no-overlap requirement. Report any capacity issue in console.
   if(remaining.length)console.warn("Heart layout could not fit every phrase without overlap:",remaining.map(p=>p.language));
-  const centerY=cy;
+  const centerY=306;
   placements.sort((a,b)=>Math.abs(b.y-centerY)-Math.abs(a.y-centerY)||a.x-b.x);
   placements.forEach((p,i)=>{
     const timer=setTimeout(()=>p.el.classList.add("visible"),i*18);
