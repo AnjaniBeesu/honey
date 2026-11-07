@@ -77,8 +77,10 @@ function heartRows(){
       }
     }
     crossings.sort((a,b)=>a-b);
-    if(crossings.length>=2){
-      const left=crossings[0]+5,right=crossings[crossings.length-1]-5;
+    // Pair intersections separately: near the cleft, the heart has two
+    // distinct lobes. Keeping them separate preserves the inward notch.
+    for(let k=0;k+1<crossings.length;k+=2){
+      const left=crossings[k]+5,right=crossings[k+1]-5;
       if(right-left>30)rows.push({y:scanY,left,right});
     }
   }
