@@ -76,27 +76,21 @@ function buildRow(row,rowIndex,allRows){
   const tokens=[];
   let phraseIndex=(rowIndex*5)%phrases.length;
   let width=0;
-  // Build a naturally spaced multilingual line, never stretching or overlapping words.
-  while(width<available+90 && tokens.length<90){
+  // Repeat phrases at their natural size so every line stays crisp and readable.
+  while(width<available && tokens.length<90){
     const phrase=phrases[phraseIndex%phrases.length][0];
     const w=ctx.measureText(phrase).width;
     tokens.push({text:phrase,width:w});
     width+=w+10;
     phraseIndex++;
   }
-  const total=width-10;
-  let x=300-total/2;
-  const start=Math.max(0,x-row.left);
-  const end=Math.min(0,row.right-(x+total));
-  // Trim whole tokens if a line extends beyond the heart edge.
-  while(tokens.length && (x<row.left-2 || x+total>row.right+2)){
-    if(x<row.left-2){const t=tokens.shift();totalDummy();x+=t.width+10;}
-    else {tokens.pop();}
-    width=tokens.reduce((s,t)=>s+t.width+10,0);
-    x=300-width/2;
+  if(tokens.length)width-=10;
+  while(tokens.length && width>available){
+    const removed=tokens.pop();
+    width-=removed.width+10;
   }
-  function totalDummy(){}
-  let cursor=x;
+  const total=width;
+  let cursor=300-total/2;
   return tokens.map(t=>{
     const el=document.createElementNS(ns,'text');
     el.setAttribute('x',cursor.toFixed(2));
