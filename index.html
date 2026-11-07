@@ -32,7 +32,6 @@ svg{width:100%;height:100%;overflow:visible}
   <button class="replay" id="replay" type="button">↻ &nbsp; replay</button>
 </main>
 <script>
-/* Every phrase below is taken only from the user's supplied language list. */
 const phrases = [
 ["Ek het jou lief","Afrikaans"],["Unë të dua","Albanian"],["እወድሻለሁ","Amharic"],["أحبكِ","Arabic"],
 ["Ես քեզ սիրում եմ","Armenian"],["Munsmawa","Aymara"],["Mən səni sevirəm","Azerbaijani"],["Maite zaitut","Basque"],
@@ -73,142 +72,134 @@ let timers=[];
 const canvas=document.createElement("canvas");
 const ctx=canvas.getContext("2d");
 
-function heartSegments(){
-  // The silhouette is derived directly from the requested implicit equation:
-  // (x² + y² - 1)³ - x²y³ = 0.  Points satisfying f(x,y) <= 0
-  // are inside the heart.  Each scanline is found from its zero crossings.
+function getRows(){
   const scale=232,cx=300,cy=306,rows=[];
-  const equation=(x,y)=>Math.pow(x*x+y*y-1,3)-x*x*y*y*y;
-  for(let mathY=0.985;mathY>=-1.005;mathY-=0.026){
-    const hits=[];
-    const steps=1800,lo=-1.18,hi=1.18,dx=(hi-lo)/steps;
-    let px=lo,pv=equation(px,mathY);
-    for(let i=1;i<=steps;i++){
-      const x=lo+i*dx,v=equation(x,mathY);
-      if((pv<=0&&v>0)||(pv>0&&v<=0)){
-        const t=pv/(pv-v);
-        hits.push(px+(x-px)*t);
+  const f=(x,y)=>(x*x+y*y-1)**3-x*x*y*y*y;
+  const step=0.026, samples=2400, lo=-1.18, hi=1.18, dx=(hi-lo)/samples;
+  for(let y=0.985;y>=-1.005;y-=step){
+    const roots=[];
+    let x0=lo,v0=f(x0,y);
+    for(let n=1;n<=samples;n++){
+      const x1=lo+n*dx,v1=f(x1,y);
+      if((v0<0&&v1>=0)||(v0>=0&&v1<0)){
+        let l=x0,h=x1,fl=v0;
+        for(let k=0;k<18;k++){
+          const m=(l+h)/2,fm=f(m,y);
+          if((fl<0&&fm<0)||(fl>=0&&fm>=0)){l=m;fl=fm}else h=m;
+        }
+        roots.push((l+h)/2);
       }
-      px=x;pv=v;
+      x0=x1;v0=v1;
     }
-    if(hits.length>=2){
-      // Pair the crossings and keep only genuinely interior spans.
-      for(let i=0;i+1<hits.length;i+=2){
-        const left=cx+hits[i]*scale+1.5,right=cx+hits[i+1]*scale-1.5;
-        if(right-left>4)rows.push({y:cy-mathY*scale,left,right});
-      }
+    for(let i=0;i+1<roots.length;i+=2){
+      const left=cx+roots[i]*scale+2.2;
+      const right=cx+roots[i+1]*scale-2.2;
+      if(right-left>10)rows.push({y:cy-y*scale,left,right});
     }
   }
   return rows;
 }
-function fontFor(text,size){
-  // Script-specific families are listed first where applicable; Noto Sans is the Latin fallback.
-  let family='"Noto Sans",sans-serif';
-  if(/[\u0600-\u06ff\u0750-\u077f]/.test(text))family='"Noto Sans Arabic",'+family;
-  else if(/[\u0900-\u097f]/.test(text))family='"Noto Sans Devanagari",'+family;
-  else if(/[\u0980-\u09ff]/.test(text))family='"Noto Sans Bengali",'+family;
-  else if(/[\u0c00-\u0c7f]/.test(text))family='"Noto Sans Telugu",'+family;
-  else if(/[\u0b80-\u0bff]/.test(text))family='"Noto Sans Tamil",'+family;
-  else if(/[\u0e00-\u0e7f]/.test(text))family='"Noto Sans Thai",'+family;
-  else if(/[\u3040-\u30ff]/.test(text))family='"Noto Sans JP",'+family;
-  else if(/[\uac00-\ud7af]/.test(text))family='"Noto Sans KR",'+family;
-  else if(/[\u4e00-\u9fff]/.test(text))family='"Noto Sans SC",'+family;
-  else if(/[\u0590-\u05ff]/.test(text))family='"Noto Sans Hebrew",'+family;
-  else if(/[\u0530-\u058f]/.test(text))family='"Noto Sans Armenian",'+family;
-  else if(/[\u10a0-\u10ff]/.test(text))family='"Noto Sans Georgian",'+family;
-  else if(/[\u1200-\u137f]/.test(text))family='"Noto Sans Ethiopic",'+family;
-  else if(/[\u1780-\u17ff]/.test(text))family='"Noto Sans Khmer",'+family;
-  else if(/[\u0e80-\u0eff]/.test(text))family='"Noto Sans Lao",'+family;
-  else if(/[\u1000-\u109f]/.test(text))family='"Noto Sans Myanmar",'+family;
-  else if(/[\u0d00-\u0d7f]/.test(text))family='"Noto Sans Malayalam",'+family;
-  else if(/[\u0c80-\u0cff]/.test(text))family='"Noto Sans Kannada",'+family;
-  else if(/[\u0a00-\u0a7f]/.test(text))family='"Noto Sans Gurmukhi",'+family;
-  else if(/[\u0b00-\u0b7f]/.test(text))family='"Noto Sans Oriya",'+family;
-  else if(/[\u0d80-\u0dff]/.test(text))family='"Noto Sans Sinhala",'+family;
-  ctx.font=size+'px '+family;
-  return family;
+function familyFor(s){
+  if(/[\u0600-\u06ff\u0750-\u077f]/.test(s))return '"Noto Sans Arabic",sans-serif';
+  if(/[\u0900-\u097f]/.test(s))return '"Noto Sans Devanagari",sans-serif';
+  if(/[\u0980-\u09ff]/.test(s))return '"Noto Sans Bengali",sans-serif';
+  if(/[\u0c00-\u0c7f]/.test(s))return '"Noto Sans Telugu",sans-serif';
+  if(/[\u0b80-\u0bff]/.test(s))return '"Noto Sans Tamil",sans-serif';
+  if(/[\u0e00-\u0e7f]/.test(s))return '"Noto Sans Thai",sans-serif';
+  if(/[\u3040-\u30ff]/.test(s))return '"Noto Sans JP",sans-serif';
+  if(/[\uac00-\ud7af]/.test(s))return '"Noto Sans KR",sans-serif';
+  if(/[\u4e00-\u9fff]/.test(s))return '"Noto Sans SC",sans-serif';
+  if(/[\u0590-\u05ff]/.test(s))return '"Noto Sans Hebrew",sans-serif';
+  if(/[\u0530-\u058f]/.test(s))return '"Noto Sans Armenian",sans-serif';
+  if(/[\u10a0-\u10ff]/.test(s))return '"Noto Sans Georgian",sans-serif';
+  if(/[\u1200-\u137f]/.test(s))return '"Noto Sans Ethiopic",sans-serif';
+  if(/[\u1780-\u17ff]/.test(s))return '"Noto Sans Khmer",sans-serif';
+  if(/[\u0e80-\u0eff]/.test(s))return '"Noto Sans Lao",sans-serif';
+  if(/[\u1000-\u109f]/.test(s))return '"Noto Sans Myanmar",sans-serif';
+  if(/[\u0d00-\u0d7f]/.test(s))return '"Noto Sans Malayalam",sans-serif';
+  if(/[\u0c80-\u0cff]/.test(s))return '"Noto Sans Kannada",sans-serif';
+  if(/[\u0a00-\u0a7f]/.test(s))return '"Noto Sans Gurmukhi",sans-serif';
+  if(/[\u0b00-\u0b7f]/.test(s))return '"Noto Sans Oriya",sans-serif';
+  if(/[\u0d80-\u0dff]/.test(s))return '"Noto Sans Sinhala",sans-serif';
+  return '"Noto Sans",sans-serif';
+}
+function measure(text,size,family){
+  ctx.font='500 '+size+'px '+family;
+  return ctx.measureText(text).width;
 }
 function layout(){
+  timers.forEach(clearTimeout);timers=[];
   svg.replaceChildren();
-  const mobile=window.matchMedia("(max-width:520px)").matches;
-  const baseSize=mobile?6.4:7.1;
-  const gap=mobile?5.2:6.2;
-  const rows=heartSegments();
-  const remaining=phrases.map(([phrase,language],index)=>({phrase,language,index}));
+  const mobile=matchMedia('(max-width:520px)').matches;
+  const base=mobile?6.2:7.0;
+  const min=mobile?3.7:4.1;
+  const gap=mobile?5.4:6.2;
+  const remaining=phrases.map(([phrase,language],index)=>({phrase,language,index,family:familyFor(phrase)}));
   const placements=[];
-  // Pack each row independently. A phrase is committed only after its measured
-  // width plus the mandatory gap fits, so no fallback can overwrite another.
+  const rows=getRows();
   for(const row of rows){
     if(!remaining.length)break;
-    const available=row.right-row.left;
+    const rowWidth=row.right-row.left;
     let cursor=row.left;
-    const rowItems=[];
+    const placed=[];
     while(remaining.length){
-      const room=row.right-cursor-(rowItems.length?gap:0);
-      if(room<=0)break;
-      let chosen=-1,chosenWidth=Infinity,chosenFamily="",chosenSize=baseSize;
+      const room=row.right-cursor-(placed.length?gap:0);
+      if(room<8)break;
+      let pick=-1,pickWidth=-1,pickSize=base;
+      // Prefer the widest phrase that fits. This reserves short phrases for
+      // the narrow shoulders and the pointed bottom of the mathematical heart.
       for(let i=0;i<remaining.length;i++){
-        const family=fontFor(remaining[i].phrase,baseSize);
-        const width=ctx.measureText(remaining[i].phrase).width;
-        if(width<=room && width<chosenWidth){
-          chosen=i;chosenWidth=width;chosenFamily=family;
-        }
+        const w=measure(remaining[i].phrase,base,remaining[i].family);
+        if(w<=room && w>pickWidth){pick=i;pickWidth=w;pickSize=base;}
       }
-      // Narrow rows near the lobes/tip may use a smaller phrase, but never
-      // below 3.5px and never beyond the row's actual interior boundaries.
-      if(chosen<0&&!rowItems.length&&available>=8){
-        let shortest=-1,shortestWidth=Infinity,shortestFamily="";
+      if(pick<0 && placed.length===0 && rowWidth>=12){
+        let best=-1,bestSize=0,bestWidth=0;
         for(let i=0;i<remaining.length;i++){
-          const family=fontFor(remaining[i].phrase,baseSize);
-          const width=ctx.measureText(remaining[i].phrase).width;
-          if(width<shortestWidth){shortest=i;shortestWidth=width;shortestFamily=family;}
+          const natural=measure(remaining[i].phrase,base,remaining[i].family);
+          const size=Math.min(base,base*(rowWidth-2)/natural);
+          if(size>=min && size>bestSize){
+            best=i;bestSize=size;bestWidth=measure(remaining[i].phrase,size,remaining[i].family);
+          }
         }
-        const fit=baseSize*Math.min(1,(available-2)/shortestWidth);
-        if(fit>=3.5){
-          fontFor(remaining[shortest].phrase,fit);
-          chosen=shortest;chosenWidth=ctx.measureText(remaining[shortest].phrase).width;
-          chosenFamily=shortestFamily;chosenSize=fit;
-        }
+        if(best>=0){pick=best;pickSize=bestSize;pickWidth=bestWidth;}
       }
-      if(chosen<0)break;
-      const item=remaining.splice(chosen,1)[0];
-      rowItems.push({item,width:chosenWidth,family:chosenFamily,size:chosenSize});
-      cursor+=chosenWidth+(rowItems.length>1?gap:0);
+      if(pick<0)break;
+      const item=remaining.splice(pick,1)[0];
+      placed.push({item,width:pickWidth,size:pickSize});
+      cursor+=pickWidth+(placed.length>1?gap:0);
     }
-    if(!rowItems.length)continue;
-    const total=rowItems.reduce((s,p)=>s+p.width,0)+gap*(rowItems.length-1);
+    if(!placed.length)continue;
+    const total=placed.reduce((n,p)=>n+p.width,0)+gap*(placed.length-1);
     let x=(row.left+row.right-total)/2;
-    for(const p of rowItems){
-      const el=document.createElementNS(NS,"text");
-      el.setAttribute("x",(x+p.width/2).toFixed(2));
-      el.setAttribute("y",row.y.toFixed(2));
-      el.setAttribute("class","word");
-      el.setAttribute("font-family",p.family);
-      el.style.fontSize=p.size+"px";
+    for(const p of placed){
+      const el=document.createElementNS(NS,'text');
+      el.setAttribute('class','word');
+      el.setAttribute('x',(x+p.width/2).toFixed(2));
+      el.setAttribute('y',row.y.toFixed(2));
+      el.setAttribute('font-family',p.item.family);
+      el.style.fontSize=p.size+'px';
       el.textContent=p.item.phrase;
       svg.appendChild(el);
-      placements.push({el,y:row.y,x:x+p.width/2});
+      placements.push(el);
       x+=p.width+gap;
     }
   }
-  // Deliberately do not force leftover phrases into occupied rows: that would
-  // violate the no-overlap requirement. Report any capacity issue in console.
-  if(remaining.length)console.warn("Heart layout could not fit every phrase without overlap:",remaining.map(p=>p.language));
-  const centerY=306;
-  placements.sort((a,b)=>Math.abs(b.y-centerY)-Math.abs(a.y-centerY)||a.x-b.x);
-  placements.forEach((p,i)=>{
-    const timer=setTimeout(()=>p.el.classList.add("visible"),i*18);
-    timers.push(timer);
+  // All text stays inside its own equation-derived scanline. Never force
+  // leftovers into occupied space; report the exact count for verification.
+  svg.dataset.placed=String(placements.length);
+  svg.dataset.total=String(phrases.length);
+  if(remaining.length)console.warn('Phrases not placed without violating spacing:',remaining.map(p=>p.language));
+  placements.forEach((el,i)=>{
+    timers.push(setTimeout(()=>el.classList.add('visible'),i*12));
   });
 }
-function render(){
-  timers.forEach(clearTimeout);timers=[];
-  // Restore the original order before each layout/replay.
-  layout();
-}
-document.getElementById("replay").addEventListener("click",render);
-document.fonts.ready.then(render);
-window.addEventListener("resize",()=>{clearTimeout(window.__heartResize);window.__heartResize=setTimeout(render,180)});
+function render(){layout();}
+document.getElementById('replay').addEventListener('click',render);
+render();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(render);
+let resizeTimer;
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,160)});
+
 </script>
 </body>
 </html>
