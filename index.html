@@ -1,205 +1,286 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#050303">
-<meta name="description" content="I love you, in languages around the world.">
-<title>for you ♥</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I love you, in every language</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Bengali:wght@500&family=Noto+Sans+Devanagari:wght@500&family=Noto+Sans+Ethiopic:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Gujarati:wght@500&family=Noto+Sans+Hebrew:wght@500&family=Noto+Sans+JP:wght@500&family=Noto+Sans+Kannada:wght@500&family=Noto+Sans+KR:wght@500&family=Noto+Sans+Khmer:wght@500&family=Noto+Sans+Lao:wght@500&family=Noto+Sans+Malayalam:wght@500&family=Noto+Sans+Myanmar:wght@500&family=Noto+Sans+Oriya:wght@500&family=Noto+Sans+SC:wght@500&family=Noto+Sans+Sinhala:wght@500&family=Noto+Sans+Tamil:wght@500&family=Noto+Sans+Telugu:wght@500&family=Noto+Sans+Thai:wght@500&family=Noto+Sans+Tibetan:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--red:#ff6254;--bg:#050303}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--bg)}
-body{min-height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#180707 0%,#090404 52%,#050303 80%);color:var(--red)}
-main{width:100vw;height:100svh;min-height:420px;display:grid;place-items:center;position:relative;padding:12px}
-.heart-stage{width:min(100%,700px);height:min(88svh,700px);display:grid;place-items:center}
-svg{width:100%;height:100%;overflow:visible}
-.word{text-anchor:middle;dominant-baseline:middle;font-family:"Noto Sans","Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Arabic","Noto Sans Devanagari","Noto Sans Bengali","Noto Sans Hebrew","Noto Sans Thai","Noto Sans Tamil","Noto Sans Telugu","Noto Sans Armenian","Noto Sans Ethiopic","Noto Sans Georgian","Noto Sans Khmer","Noto Sans Lao","Noto Sans Myanmar","Noto Sans Sinhala",sans-serif;font-size:7.6px;font-weight:500;letter-spacing:0;fill:var(--red);opacity:0}
-.word.visible{animation:appear .38s ease-out forwards}
-@keyframes appear{from{opacity:0;filter:blur(1.5px)}to{opacity:1;filter:blur(0)}}
-.replay{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid #54201c;background:#100706;color:#e77a6d;border-radius:30px;padding:9px 15px;font:9px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.68;cursor:pointer}
-.replay:hover{opacity:1;border-color:#b94235}
-@media(max-width:520px){main{padding:5px}.heart-stage{width:100%;height:82svh}.word{font-size:6.8px}.replay{bottom:14px}}
-@media(prefers-reduced-motion:reduce){.word.visible{animation:none;opacity:1}}
+:root{
+  --bg1:#fff8f7; --bg2:#ffe0e4; --red:#e0183f; --red2:#a80019; --tint:rgba(224,24,63,.07); --glow:rgba(224,24,63,.16);
+  --muted:#a8434f; --btn-bg:#d90429; --btn-fg:#fff; --btn-ring:rgba(217,4,41,.3);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg1:#220b11; --bg2:#0b0406; --red:#ff6b7d; --red2:#ff2a44; --tint:rgba(255,59,82,.09); --glow:rgba(255,59,82,.22);
+    --muted:#c98089; --btn-bg:#ff3b52; --btn-fg:#1a0509; --btn-ring:rgba(255,59,82,.38);
+  }
+}
+:root[data-theme="dark"]{
+  --bg1:#220b11; --bg2:#0b0406; --red:#ff6b7d; --red2:#ff2a44; --tint:rgba(255,59,82,.09); --glow:rgba(255,59,82,.22);
+  --muted:#c98089; --btn-bg:#ff3b52; --btn-fg:#1a0509; --btn-ring:rgba(255,59,82,.38);
+}
+html{height:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px; padding:16px 12px 24px; overflow-x:hidden;
+  background:radial-gradient(ellipse at 50% 40%, var(--bg1), var(--bg2) 78%) var(--bg2);
+  font-family:'Quicksand','Noto Sans','Segoe UI',system-ui,-apple-system,'Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Arabic','Noto Sans Hebrew','Noto Sans Thai','Noto Sans CJK SC',sans-serif;
+  font-weight:500; color:var(--red);
+}
+.stage{position:relative; line-height:1}
+.wrap{position:relative}
+.wrap::before{content:""; position:absolute; inset:-8%; border-radius:50%; background:radial-gradient(circle, var(--glow), transparent 65%); pointer-events:none}
+.w{
+  position:absolute; left:0; top:0; white-space:nowrap; line-height:1;
+  color:var(--red); color:color-mix(in srgb,var(--red) calc((1 - var(--t,0))*100%),var(--red2));
+  opacity:0; filter:blur(3px);
+  transform:translate(var(--x),var(--y)) scale(.55);
+  transition:opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1.3), filter .6s ease;
+}
+.w.show{opacity:var(--o,1); filter:blur(0); transform:translate(var(--x),var(--y)) scale(1)}
+.w.glow{animation:glow 2.4s ease-in-out}
+@keyframes glow{
+  0%,100%{text-shadow:0 0 0 transparent; transform:translate(var(--x),var(--y)) scale(1)}
+  45%{opacity:1; text-shadow:0 0 6px currentColor,0 0 16px currentColor,0 0 30px currentColor; transform:translate(var(--x),var(--y)) scale(1.16)}
+}
+.cap{min-height:1.4em; font-size:15px; letter-spacing:.02em; color:var(--muted); text-align:center}
+button{
+  font:inherit; font-weight:600; font-size:15px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:11px 28px; border:0; border-radius:999px;
+  background:var(--btn-bg); color:var(--btn-fg);
+  box-shadow:0 6px 18px -6px var(--btn-ring);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+button:hover{transform:translateY(-1px); box-shadow:0 10px 22px -6px var(--btn-ring)}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:3px solid var(--red); outline-offset:3px}
+button svg{width:16px;height:16px;transition:transform .5s ease}
+button:hover svg{transform:rotate(-200deg)}
+@media (prefers-reduced-motion: reduce){ .w{transition:none; filter:none} .w.glow{animation:none} }
 </style>
 </head>
 <body>
-<main>
-  <div class="heart-stage"><svg id="heart" viewBox="0 0 600 620" role="img" aria-label="A symmetrical heart formed from translations of I love you"></svg></div>
-  <button class="replay" id="replay" type="button">↻ &nbsp; replay</button>
-</main>
+<div class="wrap"><div class="stage" id="stage" aria-label="A heart made of the words I love you in many languages"></div></div>
+<div class="cap" id="cap" aria-live="polite"></div>
+<button id="replay" type="button">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+  Replay
+</button>
+
 <script>
-const phrases = [
-["Ek het jou lief","Afrikaans"],["Unë të dua","Albanian"],["እወድሻለሁ","Amharic"],["أحبكِ","Arabic"],
-["Ես քեզ սիրում եմ","Armenian"],["Munsmawa","Aymara"],["Mən səni sevirəm","Azerbaijani"],["Maite zaitut","Basque"],
-["Я цябе кахаю","Belarusian"],["আমি তোমায় ভালোবাসি","Bengali"],["Volim te","Bosnian"],["Обичам те","Bulgarian"],
-["မင်းကိုချစ်တယ်","Burmese"],["我愛你","Cantonese"],["T'estimo","Catalan"],["Gihigugma tika","Cebuano"],
-["Ndimakukondani","Chichewa"],["Ti tengu caru","Corsican"],["Miluji tě","Czech"],["Jeg elsker dig","Danish"],
-["Ik houd van je","Dutch"],["I love you","English"],["Mi amas vin","Esperanto"],["Ma armastan sind","Estonian"],
-["Melɔ̃ wò","Ewe"],["Au domoni iko","Fijian"],["Mahal kita","Filipino"],["Minä rakastan sinua","Finnish"],
-["Je t’aime","French"],["Is breá liom tú","Irish"],["Quérote","Galician"],["მიყვარხარ","Georgian"],
-["Ich liebe dich","German"],["Σε αγαπώ","Greek"],["Rohayhu","Guarani"],["Mwen renmen ou","Haitian Creole"],
-["Aloha wau iā ʻoe","Hawaiian"],["אני אוהב אותך","Hebrew"],["मैं आपसे प्यार करती हूँ","Hindi"],["Kuv hlub koj","Hmong"],
-["Szeretlek","Hungarian"],["Ég elska þig","Icelandic"],["A hụrụ m gị n'anya","Igbo"],["Ay-ayaten ka","Ilocano"],
-["Aku mencintaimu","Indonesian"],["Ti amo","Italian"],["愛してます","Japanese"],["Мен сені жақсы көремін","Kazakh"],
-["ខ្ញុំស្រលាញ់អ្នក","Khmer"],["Ndagukunda","Kinyarwanda"],["사랑해요","Korean"],["Ez hej te dikim","Kurdish"],
-["ຂ້ອຍຮັກເຈົ້າ","Lao"],["Te amo","Latin"],["Es mīlu Tevi","Latvian"],["Aš tave myliu","Lithuanian"],
-["Ech hunn dech gär","Luxembourgish"],["Tiako ianao","Malagasy"],["Saya sayang awak","Malay"],["Inħobbok","Maltese"],
-["我愛你","Mandarin"],["Aroha ana ahau ki a koe","Maori"],["Би чамд хайртай","Mongolian"],["Nimitztlazohtla","Nahuatl"],
-["Ayóó'ánííníshní","Navajo"],["म तिमीलाई माया गर्छु","Nepali"],["Jeg elsker deg","Norwegian"],["زه ستا سره مینه لرم","Pashto"],
-["Kocham cię","Polish"],["Te amo","Portuguese"],["ਮੈਂ ਤੁਹਾਨੂੰ ਪਿਆਰ ਕਰਦਾ ਹਾਂ","Punjabi"],["Sin jaalladha","Oromo"],
-["Kuyaykim","Quechua"],["Te iubesc","Romanian"],["Я тебя люблю","Russian"],["Oute alofa ia oe","Samoan"],
-["Ke a go rata","Sepedi"],["Волим те","Serbian"],["Kea u rata","Sesotho"],["Ľúbim ťa","Slovak"],
-["Ljubim te","Slovenian"],["Waan ku jeclahay","Somali"],["Te amo","Spanish"],["Nakupenda","Swahili"],
-["Jag älskar dig","Swedish"],["Ua here vau ia oe","Tahitian"],["நான் உன்னை நேசிக்கிறேன்","Tamil"],["నేను నిన్ను ప్రేమిస్తున్నాను","Telugu"],
-["ฉันรักคุณ","Thai"],["ང་ཁྱོད་ལ་དགའ།","Tibetan"],["ʻOku ou 'ofa au 'ia koe","Tongan"],["Ndza ku rhandza","Tsonga"],
-["Seni seviyorum","Turkish"],["я тебе люблю","Ukrainian"],["Men sizni sevaman","Uzbek"],["Tôi yêu bạn","Vietnamese"],
-["Rwy'n dy garu di","Welsh"],["Ndiyakuthanda","Xhosa"],["איך האָב דיך ליב","Yiddish"],["Mo ni fe","Yoruba"],
-["Ngiyakuthanda","Zulu"],["মই তোমাক ভাল পাওঁ","Assamese"],["हम तोहसे प्यार करेनी","Bhojpuri"],["Эпĕ сана юрататăп","Chuvash"],
-["ང་ཁྱོད་ལུ་ག་དགའི་ཡོད","Dzongkha"],["Eg elski teg","Faroese"],["Ik hâld fan dy","Frisian"],["Asavakkit","Greenlandic"],
-["હું તને પ્રેમ કરું છું","Gujarati"],["ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ","Kannada"],["तुजो मोग म्हाका जाय","Konkani"],["ഞാൻ നിന്നെ പ്രേമിക്കുന്നു","Malayalam"],
-["मी तुझ्यावर प्रेम करतो","Marathi"],["ମୁଁ ତୁମକୁ ଭଲ ପାଉଛି","Odia"],["مان توکي پيار ڪندو آهيان","Sindhi"],["මම ඔයාට ආදරෙයි","Sinhala"],
-["Abdi bogoh ka anjeun","Sundanese"],["Volim te","Croatian"],["Те сакам","Macedonian"],["Jau t\'am","Romansh"]
-,["Сэ шІу усэлъэгъу","Adyghe"],["Txin yaxtakuq","Aleut"],["Ich hàbb dir lïab","Alsatian"],["Мен сени сӱӱп jадым","Altay"],["T'aimo","Aragonese"],["Biixoo3é3en","Arapaho"],["Ti voi","Aromanian"],["Quiérote","Asturian"],["Ki micta sakihitin","Atikamekw"],["Titiyang tresna sareng ragane","Balinese"],["M'bi fe","Bambara"],["мин һине яратам","Bashkir"],["I liab di","Bavarian"],["Nalikutemwa","Bemba"],["Namumùtan taka","Bikol"],["Bong nawa ta gè","Blaan"],["Karout a ran ac'hanout","Breton"],["Nta amabo","Cape Verdean Creole"],["Go-nóhkwa’","Cayuga"],["Oupus oku diya","Central Dusun"],["Ta ama yo cuntigo","Chabacano"],["Ai ranam dai","Cham (Western)"],["Hu guiaya hao","Chamorro"],["Суна хьо дукха веза","Chechen"],["ᎬᎨᏳᎢ","Cherokee"],["Nemehotȧtse","Cheyenne"],["من دوستت دارم","Dari"],["Ina son ki","Hausa"],["Kulo tresno kaliyan njenengan","Javanese"],["Мен сени сүйөм","Kyrgyz"]
+const PH=[
+["English","I love you"],["Hindi","मैं तुमसे प्यार करता हूँ"],["Telugu","నేను నిన్ను ప్రేమిస్తున్నాను"],["German","Ich liebe dich"],
+["Korean","사랑해"],["Japanese","愛してる"],["Chinese","我爱你"],["French","Je t’aime"],["Spanish","Te amo"],["Italian","Ti amo"],
+["Arabic","أنا أحبكِ"],["Hebrew","אני אוהב אותך"],["Vietnamese","Anh yêu em"],["Thai","ผมรักคุณ"],["Turkish","Seni seviyorum"],
+["Russian","Я тебя люблю"],["Portuguese","Eu te amo"],["Dutch","Ik hou van jou"],["Swedish","Jag älskar dig"],["Polish","Kocham cię"],
+["Greek","Σ’ αγαπώ"],["Czech","Miluji tě"],["Danish","Jeg elsker dig"],["Finnish","Minä rakastan sinua"],["Norwegian","Jeg elsker deg"],
+["Hungarian","Szeretlek"],["Romanian","Te iubesc"],["Ukrainian","Я тебе кохаю"],["Indonesian","Aku cinta kamu"],["Filipino","Mahal kita"],
+["Swahili","Ninakupenda"],["Afrikaans","Ek het jou lief"],["Albanian","Te dua"],["Armenian","Ես քեզ սիրում եմ"],["Bengali","আমি তোমাকে ভালোবাসি"],
+["Bulgarian","Обичам те"],["Croatian","Volim te"],["Serbian","Волим те"],["Catalan","T’estimo"],["Hawaiian","Aloha au ia ʻoe"],
+["Tamil","நான் உன்னை காதலிக்கிறேன்"],["Kannada","ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ"],["Malayalam","ഞാൻ നിന്നെ സ്നേഹിക്കുന്നു"],
+["Marathi","मी तुझ्यावर प्रेम करतो"],["Gujarati","હું તને પ્રેમ કરું છું"],["Punjabi","ਮੈਂ ਤੈਨੂੰ ਪਿਆਰ ਕਰਦਾ ਹਾਂ"],["Urdu","میں تم سے محبت کرتا ہوں"],
+["Nepali","म तिमीलाई माया गर्छु"],["Persian","دوستت دارم"],["Malay","Saya cintakan awak"],["Icelandic","Ég elska þig"],
+["Irish","Tá grá agam duit"],["Welsh","Dw i’n dy garu di"],["Latvian","Es tevi mīlu"],["Lithuanian","Aš tave myliu"],["Estonian","Ma armastan sind"],
+["Slovak","Milujem ťa"],["Slovenian","Ljubim te"],["Macedonian","Те сакам"],["Georgian","მიყვარხარ"],["Maltese","Inħobbok"],
+["Zulu","Ngiyakuthanda"],["Amharic","እወድሻለሁ"],["Esperanto","Mi amas vin"],["Basque","Maite zaitut"],["Galician","Quérote"],
+["Mongolian","Би чамд хайртай"],["Khmer","ខ្ញុំស្រលាញ់អ្នក"],["Lao","ຂ້ອຍຮັກເຈົ້າ"],["Sinhala","මම ඔබට ආදරෙයි"],["Maori","Aroha atu"],
+["Samoan","Ou te alofa ia te oe"],["Kazakh","Мен сені сүйемін"],["Azerbaijani","Səni sevirəm"],
+["Cebuano","Gihigugma ka nako"],["Haitian Creole","Mwen renmen w"],["Uzbek","Seni sevaman"],["Kyrgyz","Мен сени сүйөм"],
+["Tajik","Туро дўст медорам"],["Pashto","زه تا سره مینه کوم"],["Kurdish","Hez te dikim"],["Somali","Waan ku jeclahay"],
+["Hausa","Ina son ka"],["Igbo","Enwere m gị n’anya"],["Shona","Ndinokuda"],["Xhosa","Ndiyakuthanda"],
+["Kinyarwanda","Ndagukunda"],["Malagasy","Tiako ianao"],["Luxembourgish","Ech hunn dech gäere"],["Frisian","Ik hâld fan dy"],
+["Scottish Gaelic","Tha gaol agam ort"],["Faroese","Eg elski teg"],["Belarusian","Я цябе кахаю"],["Odia","ମୁଁ ତୁମକୁ ଭଲ ପାଏ"],
+["Assamese","মই তোমাক ভাল পাওঁ"],["Cantonese","我愛你"],["Tongan","ʻOku ou ʻofa ʻia koe"],["Fijian","Au domoni iko"],
+["Tahitian","Ua here vau ia oe"],["Yiddish","איך האב דיך ליב"],["Quechua","Munakuyki"],["Guarani","Rohayhu"],
+["Yoruba","Mo nífẹ̀ẹ́ rẹ"],["Tibetan","ངས་ཁྱེད་ལ་བརྩེ་དུང་ཡོད"]
 ];
 
-const svg=document.getElementById("heart");
-const NS="http://www.w3.org/2000/svg";
-let timers=[];
-const canvas=document.createElement("canvas");
-const ctx=canvas.getContext("2d");
+const stage=document.getElementById('stage'), cap=document.getElementById('cap'), btn=document.getElementById('replay');
+let timers=[], glowT=null, spans=[], order=[], items=[], glyphEls=[];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 
-function getRows(){
-  const scale=232,cx=300,cy=306,rows=[];
-  const f=(x,y)=>(x*x+y*y-1)**3-x*x*y*y*y;
-  const step=0.026, samples=2400, lo=-1.18, hi=1.18, dx=(hi-lo)/samples;
-  for(let y=0.985;y>=-1.005;y-=step){
-    const roots=[];
-    let x0=lo,v0=f(x0,y);
-    for(let n=1;n<=samples;n++){
-      const x1=lo+n*dx,v1=f(x1,y);
-      if((v0<0&&v1>=0)||(v0>=0&&v1<0)){
-        let l=x0,h=x1,fl=v0;
-        for(let k=0;k<18;k++){
-          const m=(l+h)/2,fm=f(m,y);
-          if((fl<0&&fm<0)||(fl>=0&&fm>=0)){l=m;fl=fm}else h=m;
-        }
-        roots.push((l+h)/2);
-      }
-      x0=x1;v0=v1;
+function mk(text,x,y,t,o,extra){
+  const e=document.createElement('span');
+  e.className='w'; e.dir='auto'; e.textContent=text;
+  e.style.setProperty('--x',x.toFixed(2)+'px'); e.style.setProperty('--y',y.toFixed(2)+'px');
+  e.style.setProperty('--t',t.toFixed(3)); e.style.setProperty('--o',o);
+  if(extra) e.style.fontSize=extra;
+  stage.appendChild(e); return e;
+}
+
+function build(){
+  clearTimers();
+  stage.innerHTML=''; items=[]; spans=[]; glyphEls=[];
+  const vw=document.documentElement.clientWidth, vh=innerHeight;
+  const W=Math.max(260, Math.min(vw*0.95, 700, (vh-160)*1.1));
+
+  const pts=[];
+  for(let i=0;i<=720;i++){
+    const t=i/720*2*Math.PI;
+    pts.push([16*Math.pow(Math.sin(t),3), -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))]);
+  }
+  let minY=1e9,maxY=-1e9,maxX=0;
+  for(const [x,y] of pts){ if(y<minY)minY=y; if(y>maxY)maxY=y; if(Math.abs(x)>maxX)maxX=Math.abs(x); }
+  const s=W/(2*maxX), H=(maxY-minY)*s;
+  stage.style.width=W+'px'; stage.style.height=H+'px';
+  const P=pts.map(([x,y])=>[W/2+x*s,(y-minY)*s]);
+
+  const fs=Math.max(8.5,W/44), rowH0=fs*1.42, tip=fs*2.1;
+  stage.style.fontSize=fs+'px';
+
+
+  const meas=(t,fsz)=>{
+    const e=document.createElement('span'); e.className='w'; e.style.visibility='hidden';
+    if(fsz) e.style.fontSize=fsz; e.textContent=t; stage.appendChild(e);
+    const w=e.offsetWidth; e.remove(); return w;
+  };
+  const wm=PH.map(([,t])=>meas(t));
+  const minW=Math.min(...wm);
+  const FILL=['you','\u2665\uFE0E','u','\u2665\uFE0E'], fw=FILL.map(t=>meas(t));
+  let lastFill=-1;
+
+  const ivs=y=>{
+    const xs=[];
+    for(let i=0;i<P.length-1;i++){
+      const [x1,y1]=P[i],[x2,y2]=P[i+1];
+      if((y1<=y&&y2>y)||(y2<=y&&y1>y)) xs.push(x1+(y-y1)/(y2-y1)*(x2-x1));
     }
-    for(let i=0;i+1<roots.length;i+=2){
-      const left=cx+roots[i]*scale+2.2;
-      const right=cx+roots[i+1]*scale-2.2;
-      if(right-left>10)rows.push({y:cy-y*scale,left,right});
+    xs.sort((a,b)=>a-b);
+    const r=[]; for(let i=0;i+1<xs.length;i+=2) r.push([xs[i],xs[i+1]]);
+    return r;
+  };
+
+  const nR=Math.max(6,Math.floor((H-tip)/rowH0)), rowH=(H-tip)/nR, h=rowH*0.42;
+  const pad=fs*0.3, minGap=fs*1.0, maxGap=fs*2.2, cx=W/2;
+  let forced=[0,1,2,3,4], lastCenter=-1;
+  let pool=shuffle(PH.map((_,i)=>i).filter(i=>i>4));
+
+  const pick=(rem,count)=>{
+    while(forced.length){
+      const f=forced[0], need0=wm[f]+(count?minGap:0);
+      if(need0<=rem) return forced.shift();
+      if(count) return -1;
+      forced.shift();
+    }
+    if(pool.length<24) pool.push(...shuffle(PH.map((_,i)=>i)));
+    let best=-1,bl=1e9;
+    const lim=Math.min(pool.length,18);
+    for(let i=0;i<lim;i++){
+      const need=wm[pool[i]]+(count?minGap:0);
+      if(need<=rem){
+        if(rem>fs*16){ best=i; break; }
+        if(rem-need<bl){ bl=rem-need; best=i; }
+      }
+    }
+    return best<0?-1:pool.splice(best,1)[0];
+  };
+
+  for(let r=0;r<nR;r++){
+    const y=(r+.5)*rowH;
+    let a=-1e9,b=1e9,ok=true;
+    for(const yy of [y-h,y,y+h]){
+      const iv=ivs(yy); if(!iv.length){ ok=false; break; }
+      a=Math.max(a,iv[0][0]); b=Math.min(b,iv[0][1]);
+    }
+    if(!ok) continue;
+    a+=pad; b-=pad;
+    if(b<=a) continue;
+    let fi=-1;
+    if(b>cx){ do{ fi=Math.floor(Math.random()*FILL.length); }while(lastFill>=0&&FILL[fi]===FILL[lastFill]); lastFill=fi; }
+    const fw_=fi>=0?fw[fi]:0, hb=Math.min(b,cx-(fi>=0?fw_/2+minGap*0.8:minGap/2)), avail=hb-a;
+
+    if(avail>=minW){
+      if(fi>=0) items.push({text:FILL[fi],lang:null,x:cx-fw_/2,mx:null,y:y-fs/2,t:y/H});
+      // left half; the right half is its exact mirror
+      const row=[]; let sum=0;
+      for(let g=0;g<40;g++){
+        const used=sum+minGap*Math.max(0,row.length-1)*(row.length?1:0);
+        const idx=pick(avail-used,row.length);
+        if(idx<0) break;
+        row.push(idx); sum+=wm[idx];
+      }
+      if(!row.length) continue;
+      let gap=row.length>1?(avail-sum)/(row.length-1):0;
+      gap=Math.min(gap,maxGap);
+      const total=sum+gap*(row.length-1);
+      let x=a+(avail-total)/2;
+      for(const idx of row){
+        items.push({text:PH[idx][1],lang:PH[idx][0],x,mx:W-x-wm[idx],y:y-fs/2,t:y/H});
+        x+=wm[idx]+gap;
+      }
+    } else if(b>cx){
+      // narrow row near the tip: one word centred on the axis
+      const full=2*(cx-a);
+      const fit=PH.map((_,i)=>i).filter(i=>wm[i]<=full&&i!==lastCenter);
+      if(!fit.length) continue;
+      const mw=Math.max(...fit.map(i=>wm[i]));
+      const c=fit.filter(i=>wm[i]>=mw*0.6);
+      const idx=c[Math.floor(Math.random()*c.length)];
+      lastCenter=idx;
+      items.push({text:PH[idx][1],lang:PH[idx][0],x:cx-wm[idx]/2,mx:null,y:y-fs/2,t:y/H});
     }
   }
-  return rows;
-}
-function familyFor(s){
-  if(/[\u0600-\u06ff\u0750-\u077f]/.test(s))return '"Noto Sans Arabic",sans-serif';
-  if(/[\u0900-\u097f]/.test(s))return '"Noto Sans Devanagari",sans-serif';
-  if(/[\u0980-\u09ff]/.test(s))return '"Noto Sans Bengali",sans-serif';
-  if(/[\u0c00-\u0c7f]/.test(s))return '"Noto Sans Telugu",sans-serif';
-  if(/[\u0b80-\u0bff]/.test(s))return '"Noto Sans Tamil",sans-serif';
-  if(/[\u0e00-\u0e7f]/.test(s))return '"Noto Sans Thai",sans-serif';
-  if(/[\u3040-\u30ff]/.test(s))return '"Noto Sans JP",sans-serif';
-  if(/[\uac00-\ud7af]/.test(s))return '"Noto Sans KR",sans-serif';
-  if(/[\u4e00-\u9fff]/.test(s))return '"Noto Sans SC",sans-serif';
-  if(/[\u0590-\u05ff]/.test(s))return '"Noto Sans Hebrew",sans-serif';
-  if(/[\u0530-\u058f]/.test(s))return '"Noto Sans Armenian",sans-serif';
-  if(/[\u10a0-\u10ff]/.test(s))return '"Noto Sans Georgian",sans-serif';
-  if(/[\u1200-\u137f]/.test(s))return '"Noto Sans Ethiopic",sans-serif';
-  if(/[\u1780-\u17ff]/.test(s))return '"Noto Sans Khmer",sans-serif';
-  if(/[\u0e80-\u0eff]/.test(s))return '"Noto Sans Lao",sans-serif';
-  if(/[\u1000-\u109f]/.test(s))return '"Noto Sans Myanmar",sans-serif';
-  if(/[\u0d00-\u0d7f]/.test(s))return '"Noto Sans Malayalam",sans-serif';
-  if(/[\u0c80-\u0cff]/.test(s))return '"Noto Sans Kannada",sans-serif';
-  if(/[\u0a00-\u0a7f]/.test(s))return '"Noto Sans Gurmukhi",sans-serif';
-  if(/[\u0b00-\u0b7f]/.test(s))return '"Noto Sans Oriya",sans-serif';
-  if(/[\u0d80-\u0dff]/.test(s))return '"Noto Sans Sinhala",sans-serif';
-  return '"Noto Sans",sans-serif';
-}
-function measure(text,size,family){
-  ctx.font='500 '+size+'px '+family;
-  return ctx.measureText(text).width;
-}
-function layout(){
-  timers.forEach(clearTimeout);timers=[];
-  svg.replaceChildren();
-  const mobile=matchMedia('(max-width:520px)').matches;
-  const base=mobile?6.2:7.0;
-  const min=mobile?3.7:4.1;
-  const gap=mobile?5.4:6.2;
-  const remaining=phrases.map(([phrase,language],index)=>({phrase,language,index,family:familyFor(phrase)}));
-  const placements=[];
-  const rows=getRows();
-  for(const row of rows){
-    if(!remaining.length)break;
-    const rowWidth=row.right-row.left;
-    let cursor=row.left;
-    const placed=[];
-    while(remaining.length){
-      const room=row.right-cursor-(placed.length?gap:0);
-      if(room<8)break;
-      let pick=-1,pickWidth=-1,pickSize=base;
-      // Prefer the widest phrase that fits. This reserves short phrases for
-      // the narrow shoulders and the pointed bottom of the mathematical heart.
-      for(let i=0;i<remaining.length;i++){
-        const w=measure(remaining[i].phrase,base,remaining[i].family);
-        if(w<=room && w>pickWidth){pick=i;pickWidth=w;pickSize=base;}
-      }
-      if(pick<0 && placed.length===0 && rowWidth>=12){
-        let best=-1,bestSize=0,bestWidth=0;
-        for(let i=0;i<remaining.length;i++){
-          const natural=measure(remaining[i].phrase,base,remaining[i].family);
-          const size=Math.min(base,base*(rowWidth-2)/natural);
-          if(size>=min && size>bestSize){
-            best=i;bestSize=size;bestWidth=measure(remaining[i].phrase,size,remaining[i].family);
-          }
-        }
-        if(best>=0){pick=best;pickSize=bestSize;pickWidth=bestWidth;}
-      }
-      if(pick<0)break;
-      const item=remaining.splice(pick,1)[0];
-      placed.push({item,width:pickWidth,size:pickSize});
-      cursor+=pickWidth+(placed.length>1?gap:0);
-    }
-    if(!placed.length)continue;
-    const total=placed.reduce((n,p)=>n+p.width,0)+gap*(placed.length-1);
-    let x=(row.left+row.right-total)/2;
-    for(const p of placed){
-      const el=document.createElementNS(NS,'text');
-      el.setAttribute('class','word');
-      el.setAttribute('x',(x+p.width/2).toFixed(2));
-      el.setAttribute('y',row.y.toFixed(2));
-      el.setAttribute('font-family',p.item.family);
-      el.style.fontSize=p.size+'px';
-      el.textContent=p.item.phrase;
-      svg.appendChild(el);
-      placements.push(el);
-      x+=p.width+gap;
-    }
-  }
-  // All text stays inside its own equation-derived scanline. Never force
-  // leftovers into occupied space; report the exact count for verification.
-  svg.dataset.placed=String(placements.length);
-  svg.dataset.total=String(phrases.length);
-  if(remaining.length)console.warn('Phrases not placed without violating spacing:',remaining.map(p=>p.language));
-  placements.forEach((el,i)=>{
-    timers.push(setTimeout(()=>el.classList.add('visible'),i*12));
+
+  // words
+  items.forEach(it=>{
+    const o=(0.74+Math.random()*0.26).toFixed(2), pair=[];
+    pair.push(mk(it.text,it.x,it.y,it.t,o));
+    if(it.mx!=null) pair.push(mk(it.text,it.mx,it.y,it.t,o));
+    spans.push(pair);
   });
-}
-function render(){layout();}
-document.getElementById('replay').addEventListener('click',render);
-render();
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(render);
-let resizeTimer;
-window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,160)});
+  // heart glyph at the very tip
+  const gs=fs*1.35, gtxt='\u2665\uFE0E', gw=meas(gtxt,gs+'px');
+  glyphEls=[mk(gtxt,cx-gw/2,H-fs*1.15-gs/2,1,1,gs+'px')];
 
+  order=shuffle(spans.map((_,i)=>i));
+  play();
+}
+
+function clearTimers(){ timers.forEach(clearTimeout); timers=[]; clearTimeout(glowT); }
+
+function glowLoop(){
+  const all=spans.flat().concat(glyphEls);
+  const e=all[Math.floor(Math.random()*all.length)];
+  e.classList.add('glow');
+  glowT=setTimeout(()=>{
+    e.classList.remove('glow');
+    glowT=setTimeout(glowLoop,300+Math.random()*500);
+  },2400);
+}
+
+function finish(){
+  cap.textContent=new Set(items.map(i=>i.lang).filter(Boolean)).size+' ways to say I love you';
+  if(!reduce) glowLoop();
+}
+
+function play(){
+  clearTimers();
+  [...spans.flat(),...glyphEls].forEach(e=>e.classList.remove('show','glow'));
+  cap.textContent='';
+  const N=spans.length;
+  if(reduce){ [...spans.flat(),...glyphEls].forEach(e=>e.classList.add('show')); finish(); return; }
+  const total=Math.min(9000,Math.max(5000,N*80));
+  order.forEach((si,i)=>{
+    const d=350+total*Math.pow(i/N,0.85);
+    timers.push(setTimeout(()=>{
+      spans[si].forEach(e=>e.classList.add('show'));
+      if(items[si].lang) cap.textContent=items[si].lang;
+    },d));
+  });
+  timers.push(setTimeout(()=>glyphEls.forEach(e=>e.classList.add('show')),350+total+250));
+  timers.push(setTimeout(finish,350+total+1100));
+}
+
+btn.addEventListener('click',play);
+let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(build,250); });
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(build);
 </script>
 </body>
 </html>
