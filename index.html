@@ -17,7 +17,7 @@ body{min-height:100svh;display:grid;place-items:center;overflow:hidden;backgroun
 main{width:min(100vw,760px);height:100svh;min-height:420px;display:grid;place-items:center;position:relative;padding:20px}
 .heart-stage{width:min(100%,620px);aspect-ratio:1/1.04;display:grid;place-items:center}
 svg{width:100%;height:100%;overflow:visible}
-.word{font-family:'Noto Sans JP','Noto Sans KR','Noto Sans SC','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Arabic',Arial,sans-serif;font-size:10.2px;font-weight:600;fill:var(--red);opacity:0;filter:drop-shadow(0 0 3px #ff493b45)}
+.word{text-anchor:middle;font-family:'Noto Sans JP','Noto Sans KR','Noto Sans SC','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Arabic',Arial,sans-serif;font-size:9.6px;font-weight:500;fill:var(--red);opacity:0;filter:drop-shadow(0 0 3px #ff493b45)}
 .word.visible{animation:appear .32s ease-out forwards}
 @keyframes appear{from{opacity:0;filter:blur(2px);transform:translateY(2px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
 .replay{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid #54201c;background:#100706;color:#e77a6d;border-radius:30px;padding:9px 15px;font:9px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.68;cursor:pointer}
@@ -35,44 +35,17 @@ svg{width:100%;height:100%;overflow:visible}
 </main>
 <script>
 const phrases = [
-['I love you','en'],['You mean the world to me','en'],
-['मैं तुमसे प्यार करता हूँ','hi'],['तुम मेरे लिए बहुत खास हो','hi'],
-['నిన్ను ప్రేమిస్తున్నాను','te'],['నువ్వు నాకు ఎంతో ప్రత్యేకం','te'],
-['Ich liebe dich','de'],['Du bedeutest mir alles','de'],
-['사랑해','ko'],['너는 나에게 소중해','ko'],
-['愛してる','ja'],['君は私の大切な人','ja'],
-['我爱你','zh'],['你对我来说很重要','zh'],
-['Te amo','es'],['Eres mi persona favorita','es'],
-['Je t’aime','fr'],['Tu comptes énormément pour moi','fr'],
-['Ti amo','it'],['Sei speciale per me','it'],
-['Я тебя люблю','ru'],['Ты очень дорог мне','ru'],
-['أحبك','ar'],['أنت تعني لي الكثير','ar'],
-['Eu te amo','pt'],['Você é muito especial','pt'],
-['Mahal kita','tl'],['Napakahalaga mo sa akin','tl'],
-['Seni seviyorum','tr'],['Benim için çok özelsin','tr'],
-['Σ’ αγαπώ','el'],['Είσαι ξεχωριστός για μένα','el'],
-['Kocham cię','pl'],['Jesteś dla mnie wszystkim','pl'],
-['Ik hou van jou','nl'],['Je bent bijzonder voor mij','nl'],
-['Jeg elsker dig','da'],['Du betyder alverden for mig','da'],
-['Jag älskar dig','sv'],['Du är allt för mig','sv'],
-['Nakupenda','sw'],['Wewe ni wa thamani kwangu','sw'],
-['Volim te','hr'],['Poseban si mi','hr'],
-['நான் உன்னை காதலிக்கிறேன்','ta'],['நீ எனக்கு மிகவும் முக்கியம்','ta'],
-['আমি তোমাকে ভালোবাসি','bn'],['তুমি আমার কাছে খুব বিশেষ','bn'],
-['હું તને પ્રેમ કરું છું','gu'],['તું મારા માટે ખાસ છે','gu'],
-['Te quiero','es'],['Mi corazón está contigo','es'],
-['Je t’adore','fr'],['Mon cœur est à toi','fr'],
-['Ich hab dich lieb','de'],['Du bist mein Lieblingsmensch','de'],
-['사랑합니다','ko'],['항상 네 곁에 있을게','ko'],
-['愛してるよ','ja'],['ずっと大切にするよ','ja'],
-['我愛你','zh'],['你是我心中的寶藏','zh'],
-['Я люблю тебя','ru'],['Ты делаешь мой мир лучше','ru'],
-['Ti voglio bene','it'],['Con te è tutto più bello','it'],
-['أحبك كثيراً','ar'],['قلبي معك دائماً','ar'],
-['நீ என் மகிழ்ச்சி','ta'],['నీతో ఉంటే ఆనందంగా ఉంటుంది','te'],
-['너와 함께라서 행복해','ko'],['君といると幸せ','ja'],
-['Eres mi alegría','es'],['Tu es mon bonheur','fr'],
-['Du bist mein Glück','de'],['Sei la mia felicità','it']
+['I love you','English'],['मैं तुमसे प्यार करता हूँ','Hindi'],['నేను నిన్ను ప్రేమిస్తున్నాను','Telugu'],
+['Ich liebe dich','German'],['사랑해','Korean'],['愛してる','Japanese'],['我爱你','Chinese'],
+["Je t'aime",'French'],['Te amo','Spanish'],['Ti amo','Italian'],['أنا أحبكِ','Arabic'],
+['אני אוהב אותך','Hebrew'],['Anh yêu em','Vietnamese'],['ผมรักคุณ','Thai'],['Seni seviyorum','Turkish'],
+['Я тебя люблю','Russian'],['Eu te amo','Portuguese'],['Ik hou van jou','Dutch'],['Jag älskar dig','Swedish'],
+['Kocham cię','Polish'],["Σ' αγαπώ",'Greek'],['Miluji tě','Czech'],['Jeg elsker dig','Danish'],
+['Minä rakastan sinua','Finnish'],['Jeg elsker deg','Norwegian'],['Szeretlek','Hungarian'],['Te iubesc','Romanian'],
+['Я тебе кохаю','Ukrainian'],['Aku cinta kamu','Indonesian'],['Mahal kita','Filipino'],['Ninakupenda','Swahili'],
+['Ek het jou lief','Afrikaans'],['Te dua','Albanian'],['Ես քեզ սիրում եմ','Armenian'],
+['আমি তোমাকে ভালোবাসি','Bengali'],['Обичам те','Bulgarian'],['Volim te','Croatian'],['Волим те','Serbian'],
+["T'estimo",'Catalan'],['Aloha au ia ʻoe','Hawaiian']
 ];
 const svg=document.getElementById('heart');
 const ns='http://www.w3.org/2000/svg';
@@ -116,69 +89,48 @@ function heartRows(){
   }
   return rows;
 }
-function drawSegment(segment,items){
-  const total=items.reduce((sum,item)=>sum+item.width,0)+Math.max(0,items.length-1)*8;
-  let x=(segment.left+segment.right-total)/2;
-  return items.map(item=>{
-    const el=document.createElementNS(ns,'text');
-    el.setAttribute('x',x.toFixed(3));
-    el.setAttribute('y',segment.y.toFixed(2));
-    el.setAttribute('text-anchor','start');
-    el.setAttribute('dominant-baseline','middle');
-    el.setAttribute('class','word');
-    el.textContent=item.phrase;
-    svg.appendChild(el);
-    x+=item.width+8;
-    return el;
-  });
+function measurePhrase(text){
+  return ctx.measureText(text).width;
 }
 function buildRows(rows){
-  const fontSize=window.innerWidth<520?9.2:10.2;
+  const fontSize=window.innerWidth<520?8.4:9.6;
   const fontStack='"Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
-  ctx.font='600 '+fontSize+'px '+fontStack;
-  const groups=[];
-  rows.forEach(segment=>{
-    let group=groups.find(g=>Math.abs(g.y-segment.y)<0.1);
-    if(!group){group={y:segment.y,segments:[]};groups.push(group);}
-    group.segments.push(segment);
+  ctx.font='500 '+fontSize+'px '+fontStack;
+  const segments=rows.slice().sort((a,b)=>a.y-b.y || a.left-b.left);
+  const placements=[];
+  let index=0;
+  // Put one unique phrase in each available slice. If a phrase is too wide
+  // for a narrow slice, keep it for the next wider slice; never duplicate it.
+  segments.forEach((segment)=>{
+    if(index>=phrases.length)return;
+    const maxWidth=segment.right-segment.left;
+    const item=phrases[index];
+    const width=measurePhrase(item[0]);
+    if(width>maxWidth)return;
+    placements.push({segment,phrase:item[0],width});
+    index++;
   });
-  const result=[];
-  groups.forEach(group=>{
-    const segments=group.segments.sort((a,b)=>a.left-b.left);
-    if(segments.length===2){
-      // The two upper lobes receive different phrases, but their total
-      // typography width is balanced so neither side looks heavier.
-      const bins=[[],[]], widths=[0,0];
-      const limits=segments.map(s=>s.right-s.left);
-      while(phraseCursor<phrases.length){
-        const phrase=phrases[phraseCursor][0];
-        const width=ctx.measureText(phrase).width;
-        const side=widths[0]<=widths[1]?0:1;
-        if(widths[side]+(bins[side].length?8:0)+width>limits[side]){
-          const other=1-side;
-          if(widths[other]+(bins[other].length?8:0)+width>limits[other])break;
-          bins[other].push({phrase,width});
-          widths[other]+=width+(bins[other].length>1?8:0);
-        }else{
-          bins[side].push({phrase,width});
-          widths[side]+=width+(bins[side].length>1?8:0);
-        }
-        phraseCursor++;
-      }
-      bins.forEach((items,i)=>result.push(...drawSegment(segments[i],items)));
-    }else{
-      const segment=segments[0],limit=segment.right-segment.left;
-      const items=[];let widthUsed=0;
-      while(phraseCursor<phrases.length){
-        const phrase=phrases[phraseCursor][0],width=ctx.measureText(phrase).width;
-        const next=widthUsed+(items.length?8:0)+width;
-        if(next>limit)break;
-        items.push({phrase,width});widthUsed=next;phraseCursor++;
-      }
-      result.push(...drawSegment(segment,items));
+  // Use any remaining phrases in the widest unused slices, still exactly once.
+  const used=new Set(placements.map(p=>p.segment));
+  const remaining=segments.filter(s=>!used.has(s)).sort((a,b)=>(b.right-b.left)-(a.right-a.left));
+  remaining.forEach(segment=>{
+    if(index>=phrases.length)return;
+    const item=phrases[index],width=measurePhrase(item[0]);
+    if(width<=segment.right-segment.left){
+      placements.push({segment,phrase:item[0],width});index++;
     }
   });
-  return result;
+  return placements.map(({segment,phrase,width})=>{
+    const el=document.createElementNS(ns,'text');
+    el.setAttribute('x',((segment.left+segment.right)/2).toFixed(3));
+    el.setAttribute('y',segment.y.toFixed(2));
+    el.setAttribute('text-anchor','middle');
+    el.setAttribute('dominant-baseline','middle');
+    el.setAttribute('class','word');
+    el.textContent=phrase;
+    svg.appendChild(el);
+    return el;
+  });
 }
 function clear(){
   timers.forEach(clearTimeout);timers=[];
@@ -191,7 +143,7 @@ function render(){
   const elements=buildRows(rows);
   // Reveal the outside contour first, then progressively fill toward the centre.
   const order=elements.map((_,i)=>i).sort((a,b)=>{
-    const da=Math.abs(a-(rows.length-1)/2),db=Math.abs(b-(rows.length-1)/2);
+    const da=Math.abs(parseFloat(elements[a].getAttribute('y'))-310),db=Math.abs(parseFloat(elements[b].getAttribute('y'))-310);
     return db-da;
   });
   let sequence=0;
