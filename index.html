@@ -294,9 +294,9 @@ function finish(){
   const count=new Set(items.map(i=>i.lang).filter(Boolean)).size;
   cap.innerHTML='<span>'+count+' ways to say I love you</span>';
   timers.push(setTimeout(()=>{
-    cap.innerHTML='<span>'+count+' ways to say I love you</span><span class="reveal-line">and i want to say it to my favorite person</span>';
+    cap.insertAdjacentHTML('beforeend','<span class="reveal-line">and i want to say it to my favorite person</span>');
     timers.push(setTimeout(()=>{
-      cap.innerHTML='<span>'+count+' ways to say I love you</span><span class="reveal-line">and i want to say it to my favorite person</span><span class="reveal-line final">its you darling ♡</span>';
+      cap.insertAdjacentHTML('beforeend','<span class="reveal-line final">its you darling ♡</span>');
     },1800));
   },1800));
   if(!reduce) glowLoop();
