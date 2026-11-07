@@ -88,40 +88,30 @@ function heartRows(){
 }
 function buildRow(row,rowIndex){
   const available=row.right-row.left;
-  const tokens=[];
-  let phraseIndex=(rowIndex*7)%phrases.length;
-  let used=0;
-  // Keep each phrase at natural size; centre the complete line within its
-  // mathematically calculated heart slice.
-  while(tokens.length<100){
-    const phrase=phrases[phraseIndex%phrases.length][0];
-    const width=ctx.measureText(phrase).width;
-    const gap=9;
-    if(used+width+(tokens.length?gap:0)>available)break;
-    tokens.push({text:phrase,width});
-    used+=width+(tokens.length?gap:0);
-    phraseIndex++;
+  // Every row is centred on the heart's vertical axis and occupies the same
+  // amount of space on both sides. Rotate the language mix by row so the
+  // silhouette stays balanced without repeating one phrase everywhere.
+  const rowPhrases=[];
+  let cursor=(rowIndex*11)%phrases.length;
+  let naturalWidth=0;
+  while(naturalWidth<available*1.08 && rowPhrases.length<36){
+    const phrase=phrases[cursor%phrases.length][0];
+    rowPhrases.push(phrase);
+    naturalWidth+=ctx.measureText(phrase).width+12;
+    cursor+=1+(rowIndex%3);
   }
-  // On narrow rows, use the shortest translations so the tip remains delicate.
-  if(!tokens.length){
-    const shortPhrases=phrases.slice().sort((a,b)=>ctx.measureText(a[0]).width-ctx.measureText(b[0]).width);
-    const phrase=shortPhrases[rowIndex%Math.min(8,shortPhrases.length)][0];
-    const width=ctx.measureText(phrase).width;
-    if(width<=available){tokens.push({text:phrase,width});used=width;}
-  }
-  let cursor=row.left+(available-used)/2;
-  return tokens.map(t=>{
-    const el=document.createElementNS(ns,'text');
-    el.setAttribute('x',cursor.toFixed(2));
-    el.setAttribute('y',row.y.toFixed(1));
-    el.setAttribute('text-anchor','start');
-    el.setAttribute('dominant-baseline','middle');
-    el.setAttribute('class','word');
-    el.textContent=t.text;
-    svg.appendChild(el);
-    cursor+=t.width+9;
-    return el;
-  });
+  const label=rowPhrases.join('   ');
+  const el=document.createElementNS(ns,'text');
+  el.setAttribute('x',((row.left+row.right)/2).toFixed(2));
+  el.setAttribute('y',row.y.toFixed(1));
+  el.setAttribute('text-anchor','middle');
+  el.setAttribute('dominant-baseline','middle');
+  el.setAttribute('textLength',(available*0.96).toFixed(2));
+  el.setAttribute('lengthAdjust','spacing');
+  el.setAttribute('class','word');
+  el.textContent=label;
+  svg.appendChild(el);
+  return [el];
 }
 function clear(){
   timers.forEach(clearTimeout);timers=[];
