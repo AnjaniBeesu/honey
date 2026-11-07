@@ -6,7 +6,7 @@
 <title>I love you, in every language</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&family=Special+Elite&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg1:#fff8f7; --bg2:#ffe0e4; --red:#e0183f; --red2:#a80019; --tint:rgba(224,24,63,.07); --glow:rgba(224,24,63,.16);
@@ -48,12 +48,28 @@ body{
   0%,100%{text-shadow:0 0 0 transparent; transform:translate(var(--x),var(--y)) scale(1)}
   45%{opacity:1; text-shadow:0 0 6px currentColor,0 0 16px currentColor,0 0 30px currentColor; transform:translate(var(--x),var(--y)) scale(1.16)}
 }
-.dedication{position:fixed; top:22px; left:26px; z-index:5; font-family:'Special Elite',monospace; font-size:clamp(17px,2.2vw,23px); color:var(--red); letter-spacing:.02em; transform:rotate(-3deg); opacity:.9}
-.cap{min-height:3.4em; font-size:15px; letter-spacing:.02em; color:var(--muted); text-align:center; line-height:1.65}
-.cap .reveal-line{display:block; opacity:0; transform:translateY(7px); animation:lineIn .8s ease forwards}
-.cap .reveal-line.final{font-size:18px; color:var(--red); font-weight:600; animation-delay:.25s}
+.dedication{position:fixed; top:22px; left:26px; z-index:5; font-family:'Century Gothic','Avant Garde',sans-serif; font-size:clamp(17px,2.2vw,23px); color:var(--red); letter-spacing:.02em; opacity:0; animation:dedicationIn 1s ease .4s forwards}
+@keyframes dedicationIn{to{opacity:.94}}
+.cap{min-height:5.2em; font-family:'Century Gothic','Avant Garde',sans-serif; font-size:15px; letter-spacing:.02em; color:var(--muted); text-align:center; line-height:1.75}
+.cap>span{display:block; opacity:0; transform:translateY(8px); animation:lineIn .8s ease forwards}
+.cap .reveal-line{display:block; opacity:0; transform:translateY(8px); animation:lineIn .8s ease forwards}
+.cap .reveal-line.final{font-size:18px; color:var(--red); font-weight:600; animation-delay:0s}
 @keyframes lineIn{to{opacity:1;transform:translateY(0)}}
 @media(max-width:480px){.dedication{top:16px;left:15px;font-size:17px}}
+.letter-button{position:fixed;right:22px;bottom:22px;z-index:8;width:62px;height:52px;padding:0;border:1px solid var(--red);border-radius:7px;background:var(--bg1);color:var(--red);box-shadow:0 7px 22px var(--glow);display:grid;place-items:center}
+.letter-button svg{width:34px;height:29px;transition:transform .25s ease}
+.letter-button:hover svg{transform:translateY(-3px) rotate(-4deg)}
+.letter-overlay{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:22px;background:rgba(20,0,5,.58);backdrop-filter:blur(5px)}
+.letter-overlay.open{display:grid;animation:overlayIn .25s ease}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.letter-paper{position:relative;width:min(490px,92vw);max-height:82vh;overflow:auto;padding:42px 34px 36px;background:#fff9ef;color:#593b3b;border-radius:3px;box-shadow:0 20px 70px #16000666;font-family:'Century Gothic','Avant Garde',sans-serif;line-height:1.85;transform:rotate(-1deg)}
+.letter-paper:before{content:"";position:absolute;inset:12px;border:1px solid #d9b8a9;pointer-events:none}
+.letter-paper h2{margin:0 0 18px;font-family:Georgia,serif;font-weight:400;font-style:italic;color:#a43b50}
+.letter-paper p{position:relative;margin:0 0 14px;font-size:14px}
+.letter-paper .signoff{margin-top:22px;text-align:right;font-family:Georgia,serif;font-style:italic;font-size:19px;color:#a43b50}
+.letter-close{position:absolute;top:14px;right:16px;z-index:2;width:32px;height:32px;padding:0;border-radius:50%;background:#f2dfd7;color:#7a3544;font-size:20px;box-shadow:none}
+.letter-close:hover{box-shadow:none}
+@media(max-width:480px){.letter-button{right:15px;bottom:16px;width:55px;height:47px}.letter-paper{padding:38px 25px 30px}}
 button{
   font:inherit; font-weight:600; font-size:15px; cursor:pointer;
   display:inline-flex; align-items:center; gap:8px;
@@ -78,6 +94,19 @@ button:hover svg{transform:rotate(-200deg)}
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
   Replay
 </button>
+<button class="letter-button" id="letterButton" type="button" aria-label="Open my letter" title="A little letter for you">
+  <svg viewBox="0 0 40 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 7.5 20 20 37 7.5V27a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="var(--bg1)"/><path d="M3 7.5 17.8 19a3.7 3.7 0 0 0 4.4 0L37 7.5 34.5 4H5.5z" fill="var(--bg1)"/><path d="m3 29 12-11m22 11L25 18" opacity=".65"/></svg>
+</button>
+<div class="letter-overlay" id="letterOverlay" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
+  <article class="letter-paper">
+    <button class="letter-close" id="letterClose" type="button" aria-label="Close letter">×</button>
+    <h2 id="letterTitle">To my favorite person,</h2>
+    <p>I could fill a heart with a hundred languages, and still, none of them would quite explain what you mean to me.</p>
+    <p>So here is the simplest truth: in every language, in every little way, it will always be you. You make ordinary moments feel softer, brighter, and a little more magical.</p>
+    <p>If I had to choose one person to say all these words to, over and over again, I would choose you. Every single time.</p>
+    <p class="signoff">With all my love ♡</p>
+  </article>
+</div>
 
 <script>
 const PH=[
@@ -292,6 +321,11 @@ function play(){
 }
 
 btn.addEventListener('click',play);
+const letterOverlay=document.getElementById('letterOverlay');
+document.getElementById('letterButton').addEventListener('click',()=>letterOverlay.classList.add('open'));
+document.getElementById('letterClose').addEventListener('click',()=>letterOverlay.classList.remove('open'));
+letterOverlay.addEventListener('click',e=>{if(e.target===letterOverlay)letterOverlay.classList.remove('open')});
+addEventListener('keydown',e=>{if(e.key==='Escape')letterOverlay.classList.remove('open')});
 let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(build,250); });
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(build);
 </script>
