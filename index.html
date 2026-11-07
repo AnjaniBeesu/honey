@@ -17,7 +17,7 @@ body{min-height:100svh;display:grid;place-items:center;overflow:hidden;backgroun
 main{width:min(100vw,760px);height:100svh;min-height:420px;display:grid;place-items:center;position:relative;padding:20px}
 .heart-stage{width:min(100%,620px);aspect-ratio:1/1.04;display:grid;place-items:center}
 svg{width:100%;height:100%;overflow:visible}
-.word{font-family:'Noto Sans JP','Noto Sans KR','Noto Sans SC','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Arabic',Arial,sans-serif;font-size:11px;font-weight:600;fill:var(--red);opacity:0;filter:drop-shadow(0 0 3px #ff493b45)}
+.word{font-family:'Noto Sans JP','Noto Sans KR','Noto Sans SC','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Arabic',Arial,sans-serif;font-size:10.2px;font-weight:600;fill:var(--red);opacity:0;filter:drop-shadow(0 0 3px #ff493b45)}
 .word.visible{animation:appear .32s ease-out forwards}
 @keyframes appear{from{opacity:0;filter:blur(2px);transform:translateY(2px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
 .replay{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid #54201c;background:#100706;color:#e77a6d;border-radius:30px;padding:9px 15px;font:9px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.68;cursor:pointer}
@@ -35,22 +35,52 @@ svg{width:100%;height:100%;overflow:visible}
 </main>
 <script>
 const phrases = [
-  ['I love you','en'],['मैं तुमसे प्यार करता हूँ','hi'],['నిన్ను ప్రేమిస్తున్నాను','te'],
-  ['Ich liebe dich','de'],['사랑해','ko'],['愛してる','ja'],['我爱你','zh'],
-  ['Te amo','es'],['Je t’aime','fr'],['Ti amo','it'],['Я тебя люблю','ru'],
-  ['أحبك','ar'],['Eu te amo','pt'],['Mahal kita','tl'],['Seni seviyorum','tr'],
-  ['Σ’ αγαπώ','el'],['Kocham cię','pl'],['Ik hou van jou','nl'],['Jeg elsker dig','da'],
-  ['Jag älskar dig','sv'],['Nakupenda','sw'],['Volim te','hr'],['愛してるよ','ja'],
-  ['நான் உன்னை காதலிக்கிறேன்','ta'],['আমি তোমাকে ভালোবাসি','bn'],['હું તને પ્રેમ કરું છું','gu'],
-  ['أحبك كثيراً','ar'],['Te quiero','es'],['Je t’adore','fr'],['Ich hab dich lieb','de'],
-  ['사랑합니다','ko'],['我愛你','zh'],['Я люблю тебя','ru'],['Ti voglio bene','it']
+['I love you','en'],['You mean the world to me','en'],
+['मैं तुमसे प्यार करता हूँ','hi'],['तुम मेरे लिए बहुत खास हो','hi'],
+['నిన్ను ప్రేమిస్తున్నాను','te'],['నువ్వు నాకు ఎంతో ప్రత్యేకం','te'],
+['Ich liebe dich','de'],['Du bedeutest mir alles','de'],
+['사랑해','ko'],['너는 나에게 소중해','ko'],
+['愛してる','ja'],['君は私の大切な人','ja'],
+['我爱你','zh'],['你对我来说很重要','zh'],
+['Te amo','es'],['Eres mi persona favorita','es'],
+['Je t’aime','fr'],['Tu comptes énormément pour moi','fr'],
+['Ti amo','it'],['Sei speciale per me','it'],
+['Я тебя люблю','ru'],['Ты очень дорог мне','ru'],
+['أحبك','ar'],['أنت تعني لي الكثير','ar'],
+['Eu te amo','pt'],['Você é muito especial','pt'],
+['Mahal kita','tl'],['Napakahalaga mo sa akin','tl'],
+['Seni seviyorum','tr'],['Benim için çok özelsin','tr'],
+['Σ’ αγαπώ','el'],['Είσαι ξεχωριστός για μένα','el'],
+['Kocham cię','pl'],['Jesteś dla mnie wszystkim','pl'],
+['Ik hou van jou','nl'],['Je bent bijzonder voor mij','nl'],
+['Jeg elsker dig','da'],['Du betyder alverden for mig','da'],
+['Jag älskar dig','sv'],['Du är allt för mig','sv'],
+['Nakupenda','sw'],['Wewe ni wa thamani kwangu','sw'],
+['Volim te','hr'],['Poseban si mi','hr'],
+['நான் உன்னை காதலிக்கிறேன்','ta'],['நீ எனக்கு மிகவும் முக்கியம்','ta'],
+['আমি তোমাকে ভালোবাসি','bn'],['তুমি আমার কাছে খুব বিশেষ','bn'],
+['હું તને પ્રેમ કરું છું','gu'],['તું મારા માટે ખાસ છે','gu'],
+['Te quiero','es'],['Mi corazón está contigo','es'],
+['Je t’adore','fr'],['Mon cœur est à toi','fr'],
+['Ich hab dich lieb','de'],['Du bist mein Lieblingsmensch','de'],
+['사랑합니다','ko'],['항상 네 곁에 있을게','ko'],
+['愛してるよ','ja'],['ずっと大切にするよ','ja'],
+['我愛你','zh'],['你是我心中的寶藏','zh'],
+['Я люблю тебя','ru'],['Ты делаешь мой мир лучше','ru'],
+['Ti voglio bene','it'],['Con te è tutto più bello','it'],
+['أحبك كثيراً','ar'],['قلبي معك دائماً','ar'],
+['நீ என் மகிழ்ச்சி','ta'],['నీతో ఉంటే ఆనందంగా ఉంటుంది','te'],
+['너와 함께라서 행복해','ko'],['君といると幸せ','ja'],
+['Eres mi alegría','es'],['Tu es mon bonheur','fr'],
+['Du bist mein Glück','de'],['Sei la mia felicità','it']
 ];
 const svg=document.getElementById('heart');
 const ns='http://www.w3.org/2000/svg';
 let timers=[];
+let phraseCursor=0;
 const sampleCanvas=document.createElement('canvas');
 const ctx=sampleCanvas.getContext('2d');
-const font='600 11px "Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
+const font='600 10.2px Arial,sans-serif';
 ctx.font=font;
 
 // Sample a mathematically defined heart outline, then calculate the exact
@@ -88,30 +118,35 @@ function heartRows(){
 }
 function buildRow(row,rowIndex){
   const available=row.right-row.left;
-  // Every row is centred on the heart's vertical axis and occupies the same
-  // amount of space on both sides. Rotate the language mix by row so the
-  // silhouette stays balanced without repeating one phrase everywhere.
-  const rowPhrases=[];
-  let cursor=(rowIndex*11)%phrases.length;
-  let naturalWidth=0;
-  while(naturalWidth<available*1.08 && rowPhrases.length<36){
-    const phrase=phrases[cursor%phrases.length][0];
-    rowPhrases.push(phrase);
-    naturalWidth+=ctx.measureText(phrase).width+12;
-    cursor+=1+(rowIndex%3);
+  const fontSize=window.innerWidth<520?9.2:10.2;
+  ctx.font='600 '+fontSize+'px Arial';
+  const chosen=[];
+  let used=0;
+  // Each translation is used once; individual text nodes preserve real gaps.
+  while(phraseCursor<phrases.length){
+    const item=phrases[phraseCursor];
+    const width=ctx.measureText(item[0]).width;
+    const gap=9;
+    if(chosen.length && used+gap+width>available)break;
+    if(!chosen.length && width>available){phraseCursor++;continue;}
+    chosen.push({text:item[0],width});
+    used+=width+(chosen.length>1?gap:0);
+    phraseCursor++;
   }
-  const label=rowPhrases.join('   ');
-  const el=document.createElementNS(ns,'text');
-  el.setAttribute('x',((row.left+row.right)/2).toFixed(2));
-  el.setAttribute('y',row.y.toFixed(1));
-  el.setAttribute('text-anchor','middle');
-  el.setAttribute('dominant-baseline','middle');
-  el.setAttribute('textLength',(available*0.96).toFixed(2));
-  el.setAttribute('lengthAdjust','spacing');
-  el.setAttribute('class','word');
-  el.textContent=label;
-  svg.appendChild(el);
-  return [el];
+  if(!chosen.length)return [];
+  let x=row.left+(available-used)/2;
+  return chosen.map(item=>{
+    const el=document.createElementNS(ns,'text');
+    el.setAttribute('x',x.toFixed(2));
+    el.setAttribute('y',row.y.toFixed(1));
+    el.setAttribute('text-anchor','start');
+    el.setAttribute('dominant-baseline','middle');
+    el.setAttribute('class','word');
+    el.textContent=item.text;
+    svg.appendChild(el);
+    x+=item.width+9;
+    return el;
+  });
 }
 function clear(){
   timers.forEach(clearTimeout);timers=[];
@@ -119,6 +154,7 @@ function clear(){
 }
 function render(){
   clear();
+  phraseCursor=0;
   const rows=heartRows();
   const rowElements=rows.map((r,i)=>buildRow(r,i));
   // Reveal the outside contour first, then progressively fill toward the centre.
