@@ -4,160 +4,197 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050303">
-<meta name="description" content="I love you, in every language.">
+<meta name="description" content="I love you, in languages around the world.">
 <title>for you ♥</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+Devanagari:wght@500&family=Noto+Sans+JP:wght@500&family=Noto+Sans+KR:wght@500&family=Noto+Sans+SC:wght@500&family=Noto+Sans+Telugu:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&family=Noto+Sans+Arabic:wght@500&family=Noto+Sans+Armenian:wght@500&family=Noto+Sans+Bengali:wght@500&family=Noto+Sans+Devanagari:wght@500&family=Noto+Sans+Ethiopic:wght@500&family=Noto+Sans+Georgian:wght@500&family=Noto+Sans+Gujarati:wght@500&family=Noto+Sans+Hebrew:wght@500&family=Noto+Sans+JP:wght@500&family=Noto+Sans+Kannada:wght@500&family=Noto+Sans+KR:wght@500&family=Noto+Sans+Khmer:wght@500&family=Noto+Sans+Lao:wght@500&family=Noto+Sans+Malayalam:wght@500&family=Noto+Sans+Myanmar:wght@500&family=Noto+Sans+Oriya:wght@500&family=Noto+Sans+SC:wght@500&family=Noto+Sans+Sinhala:wght@500&family=Noto+Sans+Tamil:wght@500&family=Noto+Sans+Telugu:wght@500&family=Noto+Sans+Thai:wght@500&family=Noto+Sans+Tibetan:wght@500&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--red:#ff604f;--bg:#050303}
+:root{color-scheme:dark;--red:#ff6254;--bg:#050303}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg)}
-body{min-height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#160707 0%,#090404 48%,#050303 78%);color:var(--red)}
-main{width:min(100vw,760px);height:100svh;min-height:420px;display:grid;place-items:center;position:relative;padding:20px}
-.heart-stage{width:min(100%,620px);aspect-ratio:1/1.04;display:grid;place-items:center}
+body{min-height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#180707 0%,#090404 52%,#050303 80%);color:var(--red)}
+main{width:100vw;height:100svh;min-height:420px;display:grid;place-items:center;position:relative;padding:12px}
+.heart-stage{width:min(100%,700px);height:min(88svh,700px);display:grid;place-items:center}
 svg{width:100%;height:100%;overflow:visible}
-.word{text-anchor:middle;font-family:'Noto Sans JP','Noto Sans KR','Noto Sans SC','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Arabic',Arial,sans-serif;font-size:9.6px;font-weight:500;fill:var(--red);opacity:0;filter:drop-shadow(0 0 3px #ff493b45)}
-.word.visible{animation:appear .32s ease-out forwards}
-@keyframes appear{from{opacity:0;filter:blur(2px);transform:translateY(2px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
-.replay{position:absolute;bottom:max(22px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid #54201c;background:#100706;color:#e77a6d;border-radius:30px;padding:9px 15px;font:9px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.68;cursor:pointer}
+.word{text-anchor:middle;dominant-baseline:middle;font-family:"Noto Sans","Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Arabic","Noto Sans Devanagari","Noto Sans Bengali","Noto Sans Hebrew","Noto Sans Thai","Noto Sans Tamil","Noto Sans Telugu","Noto Sans Armenian","Noto Sans Ethiopic","Noto Sans Georgian","Noto Sans Khmer","Noto Sans Lao","Noto Sans Myanmar","Noto Sans Sinhala",sans-serif;font-size:7.6px;font-weight:500;letter-spacing:0;fill:var(--red);opacity:0}
+.word.visible{animation:appear .38s ease-out forwards}
+@keyframes appear{from{opacity:0;filter:blur(1.5px)}to{opacity:1;filter:blur(0)}}
+.replay{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid #54201c;background:#100706;color:#e77a6d;border-radius:30px;padding:9px 15px;font:9px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.68;cursor:pointer}
 .replay:hover{opacity:1;border-color:#b94235}
-@media(max-width:520px){main{padding:10px}.heart-stage{width:112%;max-width:none}.word{font-size:10px}.replay{bottom:18px}}
+@media(max-width:520px){main{padding:5px}.heart-stage{width:100%;height:82svh}.word{font-size:6.8px}.replay{bottom:14px}}
 @media(prefers-reduced-motion:reduce){.word.visible{animation:none;opacity:1}}
 </style>
 </head>
 <body>
 <main>
-  <div class="heart-stage">
-    <svg id="heart" viewBox="0 0 600 620" role="img" aria-label="A heart filled with I love you in many languages"></svg>
-  </div>
+  <div class="heart-stage"><svg id="heart" viewBox="0 0 600 620" role="img" aria-label="A symmetrical heart formed from translations of I love you"></svg></div>
   <button class="replay" id="replay" type="button">↻ &nbsp; replay</button>
 </main>
 <script>
+/* Every phrase below is taken only from the user's supplied language list. */
 const phrases = [
-['I love you','English'],['मैं तुमसे प्यार करता हूँ','Hindi'],['నేను నిన్ను ప్రేమిస్తున్నాను','Telugu'],
-['Ich liebe dich','German'],['사랑해','Korean'],['愛してる','Japanese'],['我爱你','Chinese'],
-["Je t'aime",'French'],['Te amo','Spanish'],['Ti amo','Italian'],['أنا أحبكِ','Arabic'],
-['אני אוהב אותך','Hebrew'],['Anh yêu em','Vietnamese'],['ผมรักคุณ','Thai'],['Seni seviyorum','Turkish'],
-['Я тебя люблю','Russian'],['Eu te amo','Portuguese'],['Ik hou van jou','Dutch'],['Jag älskar dig','Swedish'],
-['Kocham cię','Polish'],["Σ' αγαπώ",'Greek'],['Miluji tě','Czech'],['Jeg elsker dig','Danish'],
-['Minä rakastan sinua','Finnish'],['Jeg elsker deg','Norwegian'],['Szeretlek','Hungarian'],['Te iubesc','Romanian'],
-['Я тебе кохаю','Ukrainian'],['Aku cinta kamu','Indonesian'],['Mahal kita','Filipino'],['Ninakupenda','Swahili'],
-['Ek het jou lief','Afrikaans'],['Te dua','Albanian'],['Ես քեզ սիրում եմ','Armenian'],
-['আমি তোমাকে ভালোবাসি','Bengali'],['Обичам те','Bulgarian'],['Volim te','Croatian'],['Волим те','Serbian'],
-["T'estimo",'Catalan'],['Aloha au ia ʻoe','Hawaiian']
+["Ek het jou lief","Afrikaans"],["Unë të dua","Albanian"],["እወድሻለሁ","Amharic"],["أحبكِ","Arabic"],
+["Ես քեզ սիրում եմ","Armenian"],["Munsmawa","Aymara"],["Mən səni sevirəm","Azerbaijani"],["Maite zaitut","Basque"],
+["Я цябе кахаю","Belarusian"],["আমি তোমায় ভালোবাসি","Bengali"],["Volim te","Bosnian"],["Обичам те","Bulgarian"],
+["မင်းကိုချစ်တယ်","Burmese"],["我愛你","Cantonese"],["T'estimo","Catalan"],["Gihigugma tika","Cebuano"],
+["Ndimakukondani","Chichewa"],["Ti tengu caru","Corsican"],["Miluji tě","Czech"],["Jeg elsker dig","Danish"],
+["Ik houd van je","Dutch"],["I love you","English"],["Mi amas vin","Esperanto"],["Ma armastan sind","Estonian"],
+["Melɔ̃ wò","Ewe"],["Au domoni iko","Fijian"],["Mahal kita","Filipino"],["Minä rakastan sinua","Finnish"],
+["Je t’aime","French"],["Is breá liom tú","Irish"],["Quérote","Galician"],["მიყვარხარ","Georgian"],
+["Ich liebe dich","German"],["Σε αγαπώ","Greek"],["Rohayhu","Guarani"],["Mwen renmen ou","Haitian Creole"],
+["Aloha wau iā ʻoe","Hawaiian"],["אני אוהב אותך","Hebrew"],["मैं आपसे प्यार करती हूँ","Hindi"],["Kuv hlub koj","Hmong"],
+["Szeretlek","Hungarian"],["Ég elska þig","Icelandic"],["A hụrụ m gị n'anya","Igbo"],["Ay-ayaten ka","Ilocano"],
+["Aku mencintaimu","Indonesian"],["Ti amo","Italian"],["愛してます","Japanese"],["Мен сені жақсы көремін","Kazakh"],
+["ខ្ញុំស្រលាញ់អ្នក","Khmer"],["Ndagukunda","Kinyarwanda"],["사랑해요","Korean"],["Ez hej te dikim","Kurdish"],
+["ຂ້ອຍຮັກເຈົ້າ","Lao"],["Te amo","Latin"],["Es mīlu Tevi","Latvian"],["Aš tave myliu","Lithuanian"],
+["Ech hunn dech gär","Luxembourgish"],["Tiako ianao","Malagasy"],["Saya sayang awak","Malay"],["Inħobbok","Maltese"],
+["我愛你","Mandarin"],["Aroha ana ahau ki a koe","Maori"],["Би чамд хайртай","Mongolian"],["Nimitztlazohtla","Nahuatl"],
+["Ayóó'ánííníshní","Navajo"],["म तिमीलाई माया गर्छु","Nepali"],["Jeg elsker deg","Norwegian"],["زه ستا سره مینه لرم","Pashto"],
+["Kocham cię","Polish"],["Te amo","Portuguese"],["ਮੈਂ ਤੁਹਾਨੂੰ ਪਿਆਰ ਕਰਦਾ ਹਾਂ","Punjabi"],["Sin jaalladha","Oromo"],
+["Kuyaykim","Quechua"],["Te iubesc","Romanian"],["Я тебя люблю","Russian"],["Oute alofa ia oe","Samoan"],
+["Ke a go rata","Sepedi"],["Волим те","Serbian"],["Kea u rata","Sesotho"],["Ľúbim ťa","Slovak"],
+["Ljubim te","Slovenian"],["Waan ku jeclahay","Somali"],["Te amo","Spanish"],["Nakupenda","Swahili"],
+["Jag älskar dig","Swedish"],["Ua here vau ia oe","Tahitian"],["நான் உன்னை நேசிக்கிறேன்","Tamil"],["నేను నిన్ను ప్రేమిస్తున్నాను","Telugu"],
+["ฉันรักคุณ","Thai"],["ང་ཁྱོད་ལ་དགའ།","Tibetan"],["ʻOku ou 'ofa au 'ia koe","Tongan"],["Ndza ku rhand​​za","Tsonga"],
+["Seni seviyorum","Turkish"],["я тебе люблю","Ukrainian"],["Men sizni sevaman","Uzbek"],["Tôi yêu bạn","Vietnamese"],
+["Rwy'n dy garu di","Welsh"],["Ndiyakuthanda","Xhosa"],["איך האָב דיך ליב","Yiddish"],["Mo ni fe","Yoruba"],
+["Ngiyakuthanda","Zulu"],["মই তোমাক ভাল পাওঁ","Assamese"],["हम तोहसे प्यार करेनी","Bhojpuri"],["Эпĕ сана юрататăп","Chuvash"],
+["ང་ཁྱོད་ལུ་ག་དགའི་ཡོད","Dzongkha"],["Eg elski teg","Faroese"],["Ik hâld fan dy","Frisian"],["Asavakkit","Greenlandic"],
+["હું તને પ્રેમ કરું છું","Gujarati"],["ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ","Kannada"],["तुजो मोग म्हाका जाय","Konkani"],["ഞാൻ നിന്നെ പ്രേമിക്കുന്നു","Malayalam"],
+["मी तुझ्यावर प्रेम करतो","Marathi"],["ମୁଁ ତୁମକୁ ଭଲ ପାଉଛି","Odia"],["مان توکي پيار ڪندو آهيان","Sindhi"],["මම ඔයාට ආදරෙයි","Sinhala"],
+["Abdi bogoh ka anjeun","Sundanese"]
 ];
-const svg=document.getElementById('heart');
-const ns='http://www.w3.org/2000/svg';
-let timers=[];
-let phraseCursor=0;
-const sampleCanvas=document.createElement('canvas');
-const ctx=sampleCanvas.getContext('2d');
-const font='600 10.2px "Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
-ctx.font=font;
 
-// Sample a mathematically defined heart outline, then calculate the exact
-// left/right edge at every text baseline. No visible guides or coordinate marks.
-function heartRows(){
-  const outline=[];
-  const scale=13.0, cx=300, cy=310;
-  for(let i=0;i<=1200;i++){
-    const t=(i/1200)*Math.PI*2;
-    const x=16*Math.pow(Math.sin(t),3);
-    const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-    outline.push({x:cx+scale*x,y:cy-scale*y});
+const svg=document.getElementById("heart");
+const NS="http://www.w3.org/2000/svg";
+let timers=[];
+const canvas=document.createElement("canvas");
+const ctx=canvas.getContext("2d");
+
+function heartSegments(){
+  const points=[],scale=13.1,cx=300,cy=310;
+  for(let i=0;i<=2400;i++){
+    const t=i/2400*Math.PI*2;
+    points.push({x:cx+16*Math.sin(t)**3*scale,y:cy-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))*scale});
   }
-  const minY=Math.min(...outline.map(p=>p.y));
-  const maxY=Math.max(...outline.map(p=>p.y));
+  const minY=Math.min(...points.map(p=>p.y)),maxY=Math.max(...points.map(p=>p.y));
   const rows=[];
-  for(let scanY=minY+7;scanY<maxY-5;scanY+=15.5){
-    const crossings=[];
-    for(let i=0;i<outline.length-1;i++){
-      const p1=outline[i],p2=outline[i+1];
-      if((p1.y<=scanY && p2.y>scanY)||(p2.y<=scanY && p1.y>scanY)){
-        const ratio=(scanY-p1.y)/(p2.y-p1.y);
-        crossings.push(p1.x+ratio*(p2.x-p1.x));
+  // Equal baseline spacing gives the heart a clean, continuous silhouette.
+  for(let y=minY+7;y<maxY-5;y+=12.4){
+    const xs=[];
+    for(let i=0;i<points.length-1;i++){
+      const a=points[i],b=points[i+1];
+      if((a.y<=y&&b.y>y)||(b.y<=y&&a.y>y)){
+        const f=(y-a.y)/(b.y-a.y);xs.push(a.x+f*(b.x-a.x));
       }
     }
-    crossings.sort((a,b)=>a-b);
-    // Pair intersections separately: near the cleft, the heart has two
-    // distinct lobes. Keeping them separate preserves the inward notch.
-    for(let k=0;k+1<crossings.length;k+=2){
-      const left=crossings[k]+5,right=crossings[k+1]-5;
-      if(right-left>30)rows.push({y:scanY,left,right});
+    xs.sort((a,b)=>a-b);
+    for(let i=0;i+1<xs.length;i+=2){
+      const left=xs[i]+7,right=xs[i+1]-7;
+      if(right-left>20)rows.push({y,left,right});
     }
   }
   return rows;
 }
-function measurePhrase(text){
-  return ctx.measureText(text).width;
+function fontFor(text,size){
+  // Script-specific families are listed first where applicable; Noto Sans is the Latin fallback.
+  let family='"Noto Sans",sans-serif';
+  if(/[\u0600-\u06ff\u0750-\u077f]/.test(text))family='"Noto Sans Arabic",'+family;
+  else if(/[\u0900-\u097f]/.test(text))family='"Noto Sans Devanagari",'+family;
+  else if(/[\u0980-\u09ff]/.test(text))family='"Noto Sans Bengali",'+family;
+  else if(/[\u0c00-\u0c7f]/.test(text))family='"Noto Sans Telugu",'+family;
+  else if(/[\u0b80-\u0bff]/.test(text))family='"Noto Sans Tamil",'+family;
+  else if(/[\u0e00-\u0e7f]/.test(text))family='"Noto Sans Thai",'+family;
+  else if(/[\u3040-\u30ff]/.test(text))family='"Noto Sans JP",'+family;
+  else if(/[\uac00-\ud7af]/.test(text))family='"Noto Sans KR",'+family;
+  else if(/[\u4e00-\u9fff]/.test(text))family='"Noto Sans SC",'+family;
+  else if(/[\u0590-\u05ff]/.test(text))family='"Noto Sans Hebrew",'+family;
+  else if(/[\u0530-\u058f]/.test(text))family='"Noto Sans Armenian",'+family;
+  else if(/[\u10a0-\u10ff]/.test(text))family='"Noto Sans Georgian",'+family;
+  else if(/[\u1200-\u137f]/.test(text))family='"Noto Sans Ethiopic",'+family;
+  else if(/[\u1780-\u17ff]/.test(text))family='"Noto Sans Khmer",'+family;
+  else if(/[\u0e80-\u0eff]/.test(text))family='"Noto Sans Lao",'+family;
+  else if(/[\u1000-\u109f]/.test(text))family='"Noto Sans Myanmar",'+family;
+  else if(/[\u0d00-\u0d7f]/.test(text))family='"Noto Sans Malayalam",'+family;
+  else if(/[\u0c80-\u0cff]/.test(text))family='"Noto Sans Kannada",'+family;
+  else if(/[\u0a00-\u0a7f]/.test(text))family='"Noto Sans Gurmukhi",'+family;
+  else if(/[\u0b00-\u0b7f]/.test(text))family='"Noto Sans Oriya",'+family;
+  else if(/[\u0d80-\u0dff]/.test(text))family='"Noto Sans Sinhala",'+family;
+  ctx.font=size+'px '+family;
+  return family;
 }
-function buildRows(rows){
-  const fontSize=window.innerWidth<520?8.4:9.6;
-  const fontStack='"Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
-  ctx.font='500 '+fontSize+'px '+fontStack;
-  const segments=rows.slice().sort((a,b)=>a.y-b.y || a.left-b.left);
-  const placements=[];
-  let index=0;
-  // Put one unique phrase in each available slice. If a phrase is too wide
-  // for a narrow slice, keep it for the next wider slice; never duplicate it.
-  segments.forEach((segment)=>{
-    if(index>=phrases.length)return;
-    const maxWidth=segment.right-segment.left;
-    const item=phrases[index];
-    const width=measurePhrase(item[0]);
-    if(width>maxWidth)return;
-    placements.push({segment,phrase:item[0],width});
-    index++;
-  });
-  // Use any remaining phrases in the widest unused slices, still exactly once.
-  const used=new Set(placements.map(p=>p.segment));
-  const remaining=segments.filter(s=>!used.has(s)).sort((a,b)=>(b.right-b.left)-(a.right-a.left));
-  remaining.forEach(segment=>{
-    if(index>=phrases.length)return;
-    const item=phrases[index],width=measurePhrase(item[0]);
-    if(width<=segment.right-segment.left){
-      placements.push({segment,phrase:item[0],width});index++;
-    }
-  });
-  return placements.map(({segment,phrase,width})=>{
-    const el=document.createElementNS(ns,'text');
-    el.setAttribute('x',((segment.left+segment.right)/2).toFixed(3));
-    el.setAttribute('y',segment.y.toFixed(2));
-    el.setAttribute('text-anchor','middle');
-    el.setAttribute('dominant-baseline','middle');
-    el.setAttribute('class','word');
-    el.textContent=phrase;
-    svg.appendChild(el);
-    return el;
-  });
-}
-function clear(){
-  timers.forEach(clearTimeout);timers=[];
+function layout(){
   svg.replaceChildren();
+  const mobile=window.matchMedia("(max-width:520px)").matches;
+  const size=mobile?6.8:7.6;
+  const gap=mobile?7:8.5;
+  const rows=heartSegments();
+  let cursor=0;
+  const placements=[];
+  // Pack complete phrases into each horizontal cross-section. Each row is
+  // centred as a group; phrases never touch or cross the mathematical edge.
+  for(const row of rows){
+    if(cursor>=phrases.length)break;
+    const available=row.right-row.left;
+    const picked=[];
+    let used=0,attempts=0;
+    while(cursor<phrases.length&&attempts<phrases.length){
+      const [phrase]=phrases[cursor];
+      const family=fontFor(phrase,size);
+      const width=ctx.measureText(phrase).width;
+      const needed=width+(picked.length?gap:0);
+      if(used+needed<=available){
+        picked.push({phrase,width,family});
+        used+=needed;cursor++;
+      }else{
+        // If the next phrase is too long for this row, search ahead for a
+        // shorter supplied phrase; skipped phrases remain available later.
+        let found=-1;
+        for(let j=cursor+1;j<phrases.length;j++){
+          fontFor(phrases[j][0],size);
+          if(ctx.measureText(phrases[j][0]).width<=available-used-(picked.length?gap:0)){found=j;break;}
+        }
+        if(found<0)break;
+        const item=phrases.splice(found,1)[0];
+        phrases.splice(cursor,0,item);
+        attempts++;
+      }
+    }
+    if(!picked.length)continue;
+    const total=picked.reduce((sum,p)=>sum+p.width,0)+gap*(picked.length-1);
+    let x=(row.left+row.right-total)/2;
+    for(const item of picked){
+      const el=document.createElementNS(NS,"text");
+      el.setAttribute("x",(x+item.width/2).toFixed(2));
+      el.setAttribute("y",row.y.toFixed(2));
+      el.setAttribute("class","word");
+      el.setAttribute("font-family",item.family);
+      el.textContent=item.phrase;
+      svg.appendChild(el);
+      placements.push({el,y:row.y,x:x+item.width/2});
+      x+=item.width+gap;
+    }
+  }
+  // Reveal from the outer lobes and lower point toward the heart's middle.
+  const centerY=310;
+  placements.sort((a,b)=>{
+    const da=Math.abs(a.y-centerY),db=Math.abs(b.y-centerY);
+    return db-da || a.x-b.x;
+  });
+  placements.forEach((p,i)=>{
+    const timer=setTimeout(()=>p.el.classList.add("visible"),i*22);
+    timers.push(timer);
+  });
 }
 function render(){
-  clear();
-  phraseCursor=0;
-  const rows=heartRows();
-  const elements=buildRows(rows);
-  // Reveal the outside contour first, then progressively fill toward the centre.
-  const order=elements.map((_,i)=>i).sort((a,b)=>{
-    const da=Math.abs(parseFloat(elements[a].getAttribute('y'))-310),db=Math.abs(parseFloat(elements[b].getAttribute('y'))-310);
-    return db-da;
-  });
-  let sequence=0;
-  order.forEach((rowIndex,ring)=>{
-    const el=elements[rowIndex];
-    {
-      const delay=sequence*19 + ring*35;
-      const timer=setTimeout(()=>el.classList.add('visible'),delay);
-      timers.push(timer);sequence++;
-    }
-  });
+  timers.forEach(clearTimeout);timers=[];
+  // Restore the original order before each layout/replay.
+  layout();
 }
-document.getElementById('replay').addEventListener('click',render);
+document.getElementById("replay").addEventListener("click",render);
 document.fonts.ready.then(render);
+window.addEventListener("resize",()=>{clearTimeout(window.__heartResize);window.__heartResize=setTimeout(render,180)});
 </script>
 </body>
 </html>
