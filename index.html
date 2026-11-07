@@ -80,7 +80,7 @@ let timers=[];
 let phraseCursor=0;
 const sampleCanvas=document.createElement('canvas');
 const ctx=sampleCanvas.getContext('2d');
-const font='600 10.2px Arial,sans-serif';
+const font='600 10.2px "Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
 ctx.font=font;
 
 // Sample a mathematically defined heart outline, then calculate the exact
@@ -119,7 +119,7 @@ function heartRows(){
 function buildRow(row,rowIndex){
   const available=row.right-row.left;
   const fontSize=window.innerWidth<520?9.2:10.2;
-  ctx.font='600 '+fontSize+'px Arial';
+  ctx.font='600 '+fontSize+'px "Noto Sans JP","Noto Sans KR","Noto Sans SC","Noto Sans Devanagari","Noto Sans Telugu","Noto Sans Arabic",Arial,sans-serif';
   const chosen=[];
   let used=0;
   // Each translation is used once; individual text nodes preserve real gaps.
